@@ -6,54 +6,40 @@ class ExtractSourceFilesInfo:
     def __init__(self, repository_path):
         self._repository = RepositoryMining(repository_path)
 
-    # Append multiple value to a key in dictionary
-    def add_values_in_dict(sample_dict, key, list_of_values):
-        if not key in sample_dict:
-            sample_dict[key] = list()
-        if not list_of_values in sample_dict[key]:
-            sample_dict[key].append(list_of_values)
-        return sample_dict
-
+#This function creates the file-developers dictionary
     def getFileDevDictionary(self):
+        #dictionary instance
         commitDict = dict()
 
+        #Iterating the commits...
         for commit in self._repository.traverse_commits():
+            #N.B. Each commit may contain more than one modification: this is because a developer may modify more than
+            # one file, and so may commit more modified file.
+
+            #Iterating the modifications in the commit...
             for m in commit.modifications:
-                print(
-                    "Author {}".format(commit.author.name),
-                    "modified {}".format(m.filename),
-                    " with a change type of {}".format(m.change_type.name),
-                    " and the complexity is {}".format(m.complexity)
-                )
+                # print(
+                #     "{}".format(commit.author.name),
+                #     "modified {}".format(m.filename)
+                # )
 
-                commitDict = ExtractSourceFilesInfo.add_values_in_dict(commitDict, m.filename, commit.author.name)
+                #if the filename of the modification 'm' isn't already in the dictionary, let's add it as key of
+                #commitDict: the corresponding value is another dictionary!
+                #commitDict = {'filename': {} }
+                if not m.filename in commitDict:
+                    commitDict[m.filename] = dict()
+                    # print(commitDict)
 
+                #if the author modify the file 'filename' for the FIRST TIME, let's put the author name as a key of
+                #the internal dictionary (in turn, it is the value of the corresponding filename of the commitDict dictionary)
+                #and '1' as value: this value will be the counter of times that the author modify that file.!
+                if not commit.author.name in commitDict[m.filename]:
+                    commitDict[m.filename][commit.author.name] = 1
+                    # print(commitDict)
+
+                #if the author modifiy the file 'filename' for the SECOND TIME (or more), let's increase the
+                # corresponding value!
+                else:
+                    commitDict[m.filename][commit.author.name] +=1
 
         return commitDict
-
-
-    def getFileFileDictionary(self):
-        #listOfMethod = list()
-        commitDict = dict()
-        #commitLastModifiedLines = dict()
-
-        for commit in self._repository.traverse_commits():
-            for m in commit.modifications:
-                listOfMethod = list()
-                print(
-                    "\nAuthor {}".format(commit.author.name),
-                    "modified {}".format(m.filename),
-                    "source code:\n{}".format(m.source_code)
-                    # "commit last modified lines {}".format(gr.get_commits_last_modified_lines(commit))
-                )
-
-                for x in m.methods:
-                    listOfMethod.append(x.name)
-
-
-                # commitLastModifiedLines = gr.get_commits_last_modified_lines(commit)
-                #commitDict = ExtractSourceFilesInfo.add_values_in_dict(commitDict, m.filename, listOfMethod)
-                commitDict[m.filename] = listOfMethod
-
-
-        print(commitDict)
