@@ -1,10 +1,18 @@
+import os
+import shutil
+import subprocess
+
+from git import Repo
 from pydriller import RepositoryMining
+from tkinter import Tk
+from tkinter.filedialog import askdirectory
 
 
 class ExtractSourceFilesInfo:
 
     def __init__(self, repository_path):
         self._repository = RepositoryMining(repository_path)
+        self._repository_path = repository_path
 
 #This function creates the file-developers dictionary
     def getFileDevDictionary(self):
@@ -43,3 +51,27 @@ class ExtractSourceFilesInfo:
                     commitDict[m.filename][commit.author.name] +=1
 
         return commitDict
+
+    # This function creates the file-file developers dictionary
+    def getFileFileDictionary(self):
+
+        repo_dir = "clone/project"
+
+        # Remove clone folder
+        try:
+            shutil.rmtree(repo_dir)
+        except OSError as e:
+            print("Error: %s : %s" % (repo_dir, e.strerror))
+
+        # Create a local clone of the repository
+        if not os.path.exists(repo_dir):
+            Repo.clone_from(self._repository_path, repo_dir)
+
+        # Select folder to read
+        select_folder_path = askdirectory(title='Select Folder')
+
+        # Run "depends" to obtain an output file with all the dependencies
+        if select_folder_path != "":
+            subprocess.call(['java', '-jar', 'depends/depends.jar', 'java', select_folder_path, 'outputDep', '--auto-include', '-f=xls', '-d=depends'])
+        else:
+            exit()
