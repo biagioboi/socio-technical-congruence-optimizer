@@ -1,12 +1,13 @@
 import os
+import pathlib
 import shutil
 import subprocess
+import json
+from copy import deepcopy
 
 from git import Repo
 from pydriller import RepositoryMining
-from tkinter import Tk
 from tkinter.filedialog import askdirectory
-
 
 class ExtractSourceFilesInfo:
 
@@ -72,6 +73,58 @@ class ExtractSourceFilesInfo:
 
         # Run "depends" to obtain an output file with all the dependencies
         if select_folder_path != "":
-            subprocess.call(['java', '-jar', 'depends/depends.jar', 'java', select_folder_path, 'outputDep', '--auto-include', '-f=xls', '-d=depends'])
+            subprocess.call(['java', '-jar', 'depends/depends.jar', 'java', select_folder_path, 'outputDep', '--auto-include', '-d=depends'])
         else:
             exit()
+
+
+        with open("depends/outputDep.json") as f:
+            data = json.load(f)
+
+        # Get class names of the entire project
+        name_of_classes = list()
+        for key in data['variables']:
+             path = pathlib.PurePath(key)
+             name_of_classes.append(path.name)
+        print(name_of_classes)
+
+        # classNames = data["variables"]
+        # for i in range (0,43):
+        # splitting after each '/': split() returns a list of substrings of the original string (entire path):
+        # we are interested in the 9th element of the list
+        # print(i,classNames[i].split('/')[9])
+
+        # Dependencies matrix
+        dependencies = []
+        # A dependency list, used for each row of the matrix: at each iteration is used and then empty, in order
+        # to re-use it in the next iteration
+        partialDependencies = []
+
+        # Iterating all the pairs of classes that have dependencies: index goes from 0 to n (#number of classes)
+        for i in range(0, len(data["variables"])):
+            # Iterating all classes (from 0 to n)
+            for j in range(0, len(data["variables"])):
+                # Boolean variable that tell us whether any dependencies are found
+                noDependencies = True
+                # Iterating the dependencies found by "Depends":
+                for index in range(0, len(data["cells"])):
+                    # If there are dependencies from the class indexed as 'i'...
+                    if (data["cells"][index]["src"] == i):
+                        # ...to the class indexed as 'j'
+                        if (data["cells"][index]["dest"] == j):
+                            # DEPENDENCY FOUND! Put the boolean = False and compute the sum of the dependencies!
+                            noDependencies = False
+                            partialDependencies.append(sum(data["cells"][index]["values"].values()))
+                # No dependencies between the class 'i' and the class 'j': put 0 in the list
+                if (noDependencies):
+                    partialDependencies.append(0)
+
+            # We are going to the next row, this means that 'i' is going to change (another class is going to be
+            # analyzed): let's copy in a support list the 'partialDepencies' list, in order to save results in the
+            # 'dependencies' matrix, and re-use the 'partialDependencies' list in another iteration!
+            supportList = deepcopy(partialDependencies)  # copy
+            del partialDependencies[:]  # empty the list
+            dependencies.extend([supportList])  # dependencies matrix filling
+
+        print(dependencies)
+
