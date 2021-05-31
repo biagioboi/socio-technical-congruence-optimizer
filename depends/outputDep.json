@@ -1,0 +1,747 @@
+{
+  "schemaVersion" : "1.0",
+  "name" : "outputDep-sdsm",
+  "variables" : [ "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\beans\\ClassBean.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\beans\\InstanceVariableBean.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\beans\\MethodBean.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\beans\\PackageBean.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\ckMetricsExample\\CKMining.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\ckMetricsExample\\MetricVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\ClassDataShouldBePrivateRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\CodeSmellDetector.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\CodeSmellsExample.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\ComplexClassRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\FeatureEnvyRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\FunctionalDecompositionRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\GodClassRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\LongMethodRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\MisplacedClassRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\codeSmellsExample\\SpaghettiCodeRule.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\conceptualMetricsExample\\ConceptualMetricsMining.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\conceptualMetricsExample\\ConceptualMetricsVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\developerMiningExample\\DeveloperMining.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\developerMiningExample\\DeveloperVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\machineLearningExample\\Pipeline.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\metrics\\CKMetrics.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\metrics\\ConceptualMetrics.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\metrics\\CosineSimilarity.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\metrics\\FileUtility.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\metrics\\PorterStemmer.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\AssertVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\ClassParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\ClassSerializer.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\ClassVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\CodeParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\InstanceVariableParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\InstanceVariableVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\InvocationParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\InvocationVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\MethodInvocationsVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\MethodParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\MethodVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\NameVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\parser\\PackageParser.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\sentimentAnalysisExample\\SentimentAnalysisMining.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\sentimentAnalysisExample\\SentimentAnalysisVisitor.java", "C:\\Users\\User\\Desktop\\UNI\\MAGISTRALE\\PRIMO ANNO\\SECONDO SEMESTRE\\SwD\\swanalytics\\src\\main\\java\\utilities\\FolderToJavaProjectConverter.java" ],
+  "cells" : [ {
+    "src" : 12,
+    "dest" : 0,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 42,
+    "dest" : 27,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Use" : 2.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 24,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 15,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 12,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 22,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 11,
+    "dest" : 21,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Use" : 3.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 13,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 39,
+    "dest" : 3,
+    "values" : {
+      "Call" : 4.0,
+      "Import" : 1.0,
+      "Return" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 6,
+    "dest" : 0,
+    "values" : {
+      "Import" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 27,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 0,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 16,
+    "dest" : 19,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 42,
+    "dest" : 24,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 39,
+    "dest" : 0,
+    "values" : {
+      "Import" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 21,
+    "dest" : 0,
+    "values" : {
+      "Call" : 52.0,
+      "Parameter" : 32.0,
+      "Contain" : 12.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 3,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 21,
+    "dest" : 2,
+    "values" : {
+      "Call" : 30.0,
+      "Use" : 13.0,
+      "Parameter" : 18.0,
+      "Contain" : 21.0
+    }
+  }, {
+    "src" : 21,
+    "dest" : 1,
+    "values" : {
+      "Call" : 6.0,
+      "Use" : 4.0,
+      "Parameter" : 4.0,
+      "Contain" : 5.0
+    }
+  }, {
+    "src" : 39,
+    "dest" : 27,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 21,
+    "values" : {
+      "Import" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 6,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 11,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 21,
+    "dest" : 3,
+    "values" : {
+      "Call" : 14.0,
+      "Parameter" : 2.0,
+      "Contain" : 4.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 9,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 3,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 36,
+    "dest" : 38,
+    "values" : {
+      "Call" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 6,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 0,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 9,
+    "dest" : 21,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 11,
+    "dest" : 0,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 2,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 42,
+    "dest" : 30,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 36,
+    "dest" : 2,
+    "values" : {
+      "Call" : 10.0,
+      "Import" : 1.0,
+      "Return" : 1.0,
+      "Create" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 40,
+    "dest" : 41,
+    "values" : {
+      "Call" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 36,
+    "dest" : 1,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 2.0,
+      "Parameter" : 2.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 10,
+    "dest" : 2,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Parameter" : 2.0,
+      "Contain" : 2.0
+    }
+  }, {
+    "src" : 21,
+    "dest" : 24,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 10,
+    "dest" : 0,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 15,
+    "dest" : 21,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 10,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 11,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 12,
+    "values" : {
+      "Import" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 14,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 12,
+    "dest" : 21,
+    "values" : {
+      "Call" : 8.0,
+      "Import" : 1.0,
+      "Use" : 8.0
+    }
+  }, {
+    "src" : 7,
+    "dest" : 42,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 23,
+    "dest" : 24,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 9,
+    "dest" : 0,
+    "values" : {
+      "Import" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 31,
+    "values" : {
+      "Call" : 2.0,
+      "Use" : 2.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 32,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 2.0
+    }
+  }, {
+    "src" : 22,
+    "dest" : 0,
+    "values" : {
+      "Call" : 4.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 0,
+    "dest" : 1,
+    "values" : {
+      "Use" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 22,
+    "dest" : 2,
+    "values" : {
+      "Call" : 10.0,
+      "Contain" : 4.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 37,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 2.0
+    }
+  }, {
+    "src" : 0,
+    "dest" : 2,
+    "values" : {
+      "Use" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 36,
+    "values" : {
+      "Call" : 2.0,
+      "Use" : 2.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 0,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 42,
+    "dest" : 0,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0,
+      "Contain" : 4.0
+    }
+  }, {
+    "src" : 42,
+    "dest" : 3,
+    "values" : {
+      "Call" : 11.0,
+      "Import" : 1.0,
+      "Return" : 1.0,
+      "Use" : 2.0,
+      "Create" : 1.0,
+      "Parameter" : 2.0,
+      "Contain" : 6.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 3,
+    "values" : {
+      "Call" : 3.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 22,
+    "dest" : 23,
+    "values" : {
+      "Call" : 4.0,
+      "Import" : 1.0,
+      "Create" : 2.0,
+      "Contain" : 2.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 21,
+    "values" : {
+      "Call" : 3.0,
+      "Use" : 3.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 24,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 23,
+    "dest" : 25,
+    "values" : {
+      "Call" : 6.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 27,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 18,
+    "dest" : 19,
+    "values" : {
+      "Call" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 2,
+    "dest" : 1,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 3.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 16,
+    "dest" : 4,
+    "values" : {
+      "Import" : 1.0
+    }
+  }, {
+    "src" : 2,
+    "dest" : 0,
+    "values" : {
+      "Return" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 6,
+    "dest" : 21,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 16,
+    "dest" : 5,
+    "values" : {
+      "Import" : 1.0
+    }
+  }, {
+    "src" : 33,
+    "dest" : 2,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Return" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 28,
+    "dest" : 0,
+    "values" : {
+      "Call" : 4.0,
+      "Parameter" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 39,
+    "dest" : 30,
+    "values" : {
+      "Call" : 2.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 28,
+    "dest" : 1,
+    "values" : {
+      "Call" : 5.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 15,
+    "dest" : 2,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Use" : 1.0,
+      "Parameter" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 28,
+    "dest" : 2,
+    "values" : {
+      "Call" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 5,
+    "dest" : 30,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 3,
+    "dest" : 0,
+    "values" : {
+      "Use" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 36,
+    "dest" : 33,
+    "values" : {
+      "Call" : 1.0,
+      "Use" : 1.0
+    }
+  }, {
+    "src" : 15,
+    "dest" : 0,
+    "values" : {
+      "Call" : 1.0,
+      "Import" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 17,
+    "dest" : 30,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 36,
+    "dest" : 34,
+    "values" : {
+      "Call" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 1,
+    "values" : {
+      "Use" : 2.0,
+      "Parameter" : 2.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 2,
+    "values" : {
+      "Call" : 6.0,
+      "Return" : 1.0,
+      "Use" : 6.0,
+      "Parameter" : 7.0,
+      "Contain" : 5.0
+    }
+  }, {
+    "src" : 14,
+    "dest" : 3,
+    "values" : {
+      "Call" : 1.0,
+      "Parameter" : 3.0
+    }
+  }, {
+    "src" : 13,
+    "dest" : 2,
+    "values" : {
+      "Call" : 2.0,
+      "Import" : 1.0,
+      "Parameter" : 1.0
+    }
+  }, {
+    "src" : 14,
+    "dest" : 2,
+    "values" : {
+      "Call" : 4.0,
+      "Contain" : 4.0
+    }
+  }, {
+    "src" : 27,
+    "dest" : 0,
+    "values" : {
+      "Call" : 20.0,
+      "Return" : 2.0,
+      "Create" : 2.0,
+      "Contain" : 2.0
+    }
+  }, {
+    "src" : 14,
+    "dest" : 0,
+    "values" : {
+      "Call" : 2.0,
+      "Parameter" : 2.0,
+      "Contain" : 1.0
+    }
+  }, {
+    "src" : 4,
+    "dest" : 5,
+    "values" : {
+      "Call" : 1.0,
+      "Create" : 1.0
+    }
+  }, {
+    "src" : 31,
+    "dest" : 1,
+    "values" : {
+      "Call" : 7.0,
+      "Import" : 1.0,
+      "Return" : 1.0,
+      "Create" : 1.0,
+      "Contain" : 1.0
+    }
+  } ]
+}
