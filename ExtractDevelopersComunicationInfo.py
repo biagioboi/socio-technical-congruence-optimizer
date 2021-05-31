@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("username", "authToken")
+session.auth = ("username", "token")
 
 
 class ExtractDevelopersCommunicationInfo:
@@ -44,7 +44,19 @@ class ExtractDevelopersCommunicationInfo:
 
         plt.axis("off")
         plt.show()
-        return True
+
+        # create the adjacent matrix
+        matrix = []
+        for contributor in self._contributors:
+            matrix_contributor = []
+            for contributor2, devs in self._contributors.items():
+                if contributor in self._contributors[contributor2]:
+                    matrix_contributor.append(self._contributors[contributor2][contributor])
+                else:
+                    matrix_contributor.append(0)
+            matrix.append(matrix_contributor)
+
+        return matrix
 
     def get_issues(self):
         # It's possible to catch only one page for time, and for each page at most 100 issues
