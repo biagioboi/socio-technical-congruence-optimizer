@@ -164,6 +164,9 @@ class ExtractSourceFilesInfo:
                 else: #otherwise put 0
                     fileDevRow.append(0)
 
+            # We are going to the next row, this means that 'i' is going to change (another file is going to be
+            # analyzed): let's copy in a support list the 'fileDevRow' list, in order to save results in the
+            # matrix, and re-use the 'fileDevRow' list in another iteration!
             supportList = deepcopy(fileDevRow)  # copy
             del fileDevRow[:]  # empty the list
             fileDevMatrix.extend([supportList])  # matrix filling
