@@ -69,7 +69,7 @@ class ExtractSourceFilesInfo:
             Repo.clone_from(self._repository_path, repo_dir)
 
         # Select folder to read
-        select_folder_path = askdirectory(title='Select Folder')
+        select_folder_path = askdirectory(initialdir=repo_dir, title='Select Folder')
 
         # Run "depends" to obtain an output file with all the dependencies
         if select_folder_path != "":
@@ -79,6 +79,7 @@ class ExtractSourceFilesInfo:
 
 
     def getFileFileMatrix(self):
+        self.getFileFileDictionary()
 
         with open("depends/outputDep.json") as f:
             data = json.load(f)
@@ -86,8 +87,11 @@ class ExtractSourceFilesInfo:
         # Get class names of the entire project
         name_of_classes = list()
         for key in data['variables']:
-             path = pathlib.PurePath(key)
-             name_of_classes.append(path.name)
+            # I've explicitly declared my path as being in Windows format, so I can use forward slashes in it.
+            filename = pathlib.PureWindowsPath(key)
+            # Convert path to the right format for the current operating system
+            path = pathlib.PurePath(filename)
+            name_of_classes.append(path.name)
         print(name_of_classes)
 
         # classNames = data["variables"]
