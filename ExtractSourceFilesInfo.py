@@ -78,6 +78,8 @@ class ExtractSourceFilesInfo:
             exit()
 
 
+    def getFileFileMatrix(self):
+
         with open("depends/outputDep.json") as f:
             data = json.load(f)
 
@@ -98,7 +100,7 @@ class ExtractSourceFilesInfo:
         dependencies = []
         # A dependency list, used for each row of the matrix: at each iteration is used and then empty, in order
         # to re-use it in the next iteration
-        partialDependencies = []
+        dependenciesRow = []
 
         # Iterating all the pairs of classes that have dependencies: index goes from 0 to n (#number of classes)
         for i in range(0, len(data["variables"])):
@@ -114,17 +116,56 @@ class ExtractSourceFilesInfo:
                         if (data["cells"][index]["dest"] == j):
                             # DEPENDENCY FOUND! Put the boolean = False and compute the sum of the dependencies!
                             noDependencies = False
-                            partialDependencies.append(sum(data["cells"][index]["values"].values()))
+                            dependenciesRow.append(sum(data["cells"][index]["values"].values()))
                 # No dependencies between the class 'i' and the class 'j': put 0 in the list
                 if (noDependencies):
-                    partialDependencies.append(0)
+                    dependenciesRow.append(0)
 
             # We are going to the next row, this means that 'i' is going to change (another class is going to be
             # analyzed): let's copy in a support list the 'partialDepencies' list, in order to save results in the
-            # 'dependencies' matrix, and re-use the 'partialDependencies' list in another iteration!
-            supportList = deepcopy(partialDependencies)  # copy
-            del partialDependencies[:]  # empty the list
+            # 'dependencies' matrix, and re-use the 'dependenciesRow' list in another iteration!
+            supportList = deepcopy(dependenciesRow)  # copy
+            del dependenciesRow[:]  # empty the list
             dependencies.extend([supportList])  # dependencies matrix filling
 
         print(dependencies)
 
+    def getFileDevMatrix(self):
+        #Getting data
+        data = self.getFileDevDictionary()
+
+        #Get all file names
+        fileNames = (list)(data.keys())
+        devNames = []
+
+        #Get all developers names
+        for file in fileNames:
+            for key in data[file].keys():
+                if key not in devNames:
+                    # print(key)
+                    devNames.append(key)
+
+        # File dev matrix
+        fileDevMatrix = []
+
+        # A list, used for each row of the matrix: at each iteration is used and then empty, in order
+        # to re-use it in the next iteration
+        fileDevRow = []
+
+        #Iterating file names
+        for i in range (0, len(fileNames)):
+            #Iterating developers names
+            for j in range (0, len(devNames)):
+                #If a developer name is in the dictionary associated to a certain file... (this means that he made
+                #at least 1 commit on that file
+                if (devNames[j] in data[fileNames[i]]):
+                    #append the number of commits on that file
+                    fileDevRow.append(data[fileNames[i]][devNames[j]])
+                else: #otherwise put 0
+                    fileDevRow.append(0)
+
+            supportList = deepcopy(fileDevRow)  # copy
+            del fileDevRow[:]  # empty the list
+            fileDevMatrix.extend([supportList])  # matrix filling
+
+        print(fileDevMatrix)
