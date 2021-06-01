@@ -7,7 +7,6 @@ from copy import deepcopy
 
 from git import Repo
 from pydriller import RepositoryMining
-from tkinter.filedialog import askdirectory
 
 class ExtractSourceFilesInfo:
 
@@ -15,12 +14,12 @@ class ExtractSourceFilesInfo:
         self._repository = RepositoryMining(repository_path)
         self._repository_path = repository_path
 
-#This function creates the file-developers dictionary
+    # This function creates the file-developers dictionary
     def getFileDevDictionary(self):
-        #dictionary instance
+        # dictionary instance
         commitDict = dict()
 
-        #Iterating the commits...
+        # Iterating the commits...
         for commit in self._repository.traverse_commits():
             #N.B. Each commit may contain more than one modification: this is because a developer may modify more than
             # one file, and so may commit more modified file.
@@ -55,12 +54,11 @@ class ExtractSourceFilesInfo:
 
     # This function creates the file-file developers dictionary
     def getFileFileDictionary(self):
-
         repo_dir = "clone/project"
 
         # Remove clone folder
         try:
-            shutil.rmtree(repo_dir)
+            shutil.rmtree(repo_dir, ignore_errors=True)
         except OSError as e:
             print("Error: %s : %s" % (repo_dir, e.strerror))
 
@@ -68,19 +66,14 @@ class ExtractSourceFilesInfo:
         if not os.path.exists(repo_dir):
             Repo.clone_from(self._repository_path, repo_dir)
 
-        # Select folder to read
-        select_folder_path = askdirectory(initialdir=repo_dir, title='Select Folder')
-
-        # Run "depends" to obtain an output file with all the dependencies
-        if select_folder_path != "":
-            subprocess.call(['java', '-jar', 'depends/depends.jar', 'java', select_folder_path, 'outputDep', '--auto-include', '-d=depends'])
-        else:
-            exit()
+        subprocess.call(
+            ['java', '-jar', 'depends/depends.jar', 'java', repo_dir, 'outputDep', '--auto-include',
+             '-d=depends'])
 
 
     def getFileFileMatrix(self):
+        print("preFIle")
         self.getFileFileDictionary()
-
         with open("depends/outputDep.json") as f:
             data = json.load(f)
 
@@ -135,6 +128,7 @@ class ExtractSourceFilesInfo:
         print(dependencies)
 
     def getFileDevMatrix(self):
+        print("preDevFile")
         #Getting data
         data = self.getFileDevDictionary()
 
@@ -175,4 +169,4 @@ class ExtractSourceFilesInfo:
             del fileDevRow[:]  # empty the list
             fileDevMatrix.extend([supportList])  # matrix filling
 
-        print(fileDevMatrix)
+        return fileDevMatrix
