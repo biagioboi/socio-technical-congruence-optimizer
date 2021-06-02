@@ -4,7 +4,6 @@ import shutil
 import subprocess
 import json
 from copy import deepcopy
-
 from git import Repo
 from pydriller import RepositoryMining
 
@@ -54,7 +53,9 @@ class ExtractSourceFilesInfo:
 
     # This function creates the file-file developers dictionary
     def getFileFileDictionary(self):
-        repo_dir = "clone/project"
+        repo_dir = "clone"
+        if not os.path.exists(repo_dir):
+            os.makedirs(repo_dir)
 
         # Remove clone folder
         try:

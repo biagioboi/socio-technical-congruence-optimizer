@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("username", "token")
+session.auth = ("biagioboi", "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")
 
 
 class ExtractDevelopersCommunicationInfo:
