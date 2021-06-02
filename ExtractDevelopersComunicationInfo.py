@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("biagioboi", "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")
+session.auth = ("username", "password")
 
 
 class ExtractDevelopersCommunicationInfo:
@@ -12,6 +12,32 @@ class ExtractDevelopersCommunicationInfo:
         self._repository_name = repository_name
         self._graph = nx.Graph()
         self._contributors = dict()
+        self._developers_list = []
+
+    def get_developers(self):
+        devs = session.get(
+            'https://api.github.com/repos/' + self._repository_name + '/contributors',
+            headers={'content-type': 'application/vnd.github.v3+json'})
+
+        to_return = dict()
+
+        if devs.status_code != 200:
+            raise ApiError('GET /issues/ {}'.format(devs.status_code))
+        else:
+            for x in devs.json():
+                dev_detail = session.get(
+                    'https://api.github.com/users/' + x['login'],
+                    headers={'content-type': 'application/vnd.github.v3+json'})
+
+                if dev_detail.status_code != 200:
+                    raise ApiError('GET /issues/ {}'.format(dev_detail.status_code))
+                else:
+                    y = dev_detail.json()
+                    to_return[y['login']] = y['name']
+
+        self._developers_list = to_return
+
+
 
     def get_communications_between_contributors(self):
         contributors_for_issue = self.get_contributors_for_issue(self.get_issues())
@@ -56,7 +82,7 @@ class ExtractDevelopersCommunicationInfo:
                     matrix_contributor.append(0)
             matrix.append(matrix_contributor)
 
-        return matrix
+        return self._contributors
 
     def get_issues(self):
         # It's possible to catch only one page for time, and for each page at most 100 issues
@@ -77,6 +103,7 @@ class ExtractDevelopersCommunicationInfo:
 
     def get_contributors_for_issue(self, comments_urls):
         to_return = dict()
+        self.get_developers()
         for k, v in comments_urls.items():
             to_return[k] = dict()
             comments = session.get(v,
@@ -90,4 +117,10 @@ class ExtractDevelopersCommunicationInfo:
                             to_return[k][item['user']['login']] = to_return[k][item['user']['login']] + 1
                         else:
                             to_return[k][item['user']['login']] = 1
-        return to_return
+        real_to_retrun = dict()
+        for k, v in to_return.items():
+            real_to_retrun[k] = dict()
+            for keydev, number in v.items():
+                real_to_retrun[k][self._developers_list[keydev]] = number
+
+        return real_to_retrun
