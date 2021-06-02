@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("biagioboi", "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")
+session.auth = ("username", "token")
 
 
 class ExtractDevelopersCommunicationInfo:
@@ -91,7 +91,3 @@ class ExtractDevelopersCommunicationInfo:
                         else:
                             to_return[k][item['user']['login']] = 1
         return to_return
-
-
-z = ExtractDevelopersCommunicationInfo('PrestaShop/PrestaShop')
-print(z.get_communications_between_contributors())

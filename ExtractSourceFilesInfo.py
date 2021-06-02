@@ -72,7 +72,6 @@ class ExtractSourceFilesInfo:
 
 
     def getFileFileMatrix(self):
-        print("preFIle")
         self.getFileFileDictionary()
         with open("depends/outputDep.json") as f:
             data = json.load(f)
@@ -128,7 +127,6 @@ class ExtractSourceFilesInfo:
         print(dependencies)
 
     def getFileDevMatrix(self):
-        print("preDevFile")
         #Getting data
         data = self.getFileDevDictionary()
 
