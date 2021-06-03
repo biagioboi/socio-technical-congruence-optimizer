@@ -13,6 +13,7 @@ class ExtractSourceFilesInfo:
         self._repository = RepositoryMining("https://www.github.com/" + repository_path + ".git")
         self._repository_path = repository_path
         self._path_to_file = path_to_file
+        self._classNames = []
 
     # This function creates the file-developers dictionary
     def getFileDevDictionary(self):
@@ -48,10 +49,10 @@ class ExtractSourceFilesInfo:
 
     # This function creates the file-file developers dictionary
     def getFileFileDictionary(self):
-        repo_dir = self._repository_path + "/" + self._path_to_file
 
+        repo_dir = self._repository_path + "/" + self._path_to_file
         subprocess.call(
-            ['java', '-jar', 'depends/depends.jar', 'java', repo_dir, 'outputDep', '--auto-include',
+            ['java', '-jar', 'depends/depends.jar', 'java', repo_dir+"/src/main", 'outputDep', '--auto-include',
              '-d=depends'])
 
 
@@ -68,6 +69,8 @@ class ExtractSourceFilesInfo:
             # Convert path to the right format for the current operating system
             path = pathlib.PurePath(filename)
             name_of_classes.append(path.name)
+
+        self._classNames = name_of_classes
 
         # classNames = data["variables"]
         # for i in range (0,43):
@@ -116,7 +119,9 @@ class ExtractSourceFilesInfo:
                 dict_to_return[class_name][class_name_2] = dependencies[k][j]
                 j = j + 1
             k = k + 1
-        return dependencies
+
+        return dependencies, name_of_classes
+
 
     def getFileDevMatrix(self):
         #Getting data
@@ -127,7 +132,7 @@ class ExtractSourceFilesInfo:
         devNames = []
 
         #Get all developers names
-        for file in fileNames:
+        for file in self._classNames:
             for key in data[file].keys():
                 if key not in devNames:
                     # print(key)
@@ -141,14 +146,14 @@ class ExtractSourceFilesInfo:
         fileDevRow = []
 
         #Iterating file names
-        for i in range (0, len(fileNames)):
+        for i in range (0, len(self._classNames)):
             #Iterating developers names
             for j in range (0, len(devNames)):
                 #If a developer name is in the dictionary associated to a certain file... (this means that he made
                 #at least 1 commit on that file
-                if (devNames[j] in data[fileNames[i]]):
+                if (devNames[j] in data[self._classNames[i]]):
                     #append the number of commits on that file
-                    fileDevRow.append(data[fileNames[i]][devNames[j]])
+                    fileDevRow.append(data[self._classNames[i]][devNames[j]])
                 else: #otherwise put 0
                     fileDevRow.append(0)
 
@@ -159,4 +164,4 @@ class ExtractSourceFilesInfo:
             del fileDevRow[:]  # empty the list
             fileDevMatrix.extend([supportList])  # matrix filling
 
-        return fileDevMatrix
+        return fileDevMatrix, devNames
