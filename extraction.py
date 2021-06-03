@@ -1,15 +1,12 @@
 from ExtractSourceFilesInfo import ExtractSourceFilesInfo
 from ExtractDevelopersComunicationInfo import ExtractDevelopersCommunicationInfo
 
-from_git_url = "https://github.com/square/javapoet.git"
 
+# You need to store the repository and then you can start the script
 
-toExtract = ExtractSourceFilesInfo(from_git_url)
-
-print(toExtract.getFileFileMatrix())
-
+repo = "square/javapoet"
+toExtract = ExtractSourceFilesInfo(repo, "src/main")
+print(toExtract.getFileFileDictionary())
 print(toExtract.getFileDevMatrix())
-
-toExtractDev = ExtractDevelopersCommunicationInfo('square/javapoet')
-
+toExtractDev = ExtractDevelopersCommunicationInfo(repo)
 print(toExtractDev.get_communications_between_contributors())
