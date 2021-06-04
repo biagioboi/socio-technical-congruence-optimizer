@@ -52,7 +52,7 @@ class ExtractSourceFilesInfo:
 
         repo_dir = self._repository_path + "/" + self._path_to_file
         subprocess.call(
-            ['java', '-jar', 'depends/depends.jar', 'java', repo_dir+"/src/main", 'outputDep', '--auto-include',
+            ['java', '-jar', 'depends/depends.jar', 'java', repo_dir, 'outputDep', '--auto-include',
              '-d=depends'])
 
 
