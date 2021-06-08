@@ -19,6 +19,18 @@ def execute_ga(matrix, num_dev):
             break
         cont += 1
 
+    # for each file, check the number of commit by devs, in order to determine the importance of that file
+    dev_worked = []
+    for x in matrix[num_file:len(matrix)-1]:
+        if not dev_worked:  # means that the list is empty, so initialize it
+            dev_worked = x[0:num_file-1]
+        else:  # otherwise update the current values
+            for index in range(0, len(x) - 1):
+                dev_worked[index] += x[index]
+                if index == len(dev_worked) - 1:
+                    break
+    print(dev_worked)
+
     # problem constants:
     # length of the random list to create
     ONE_MAX_LENGTH = num_file  # length of bit string to be optimized
@@ -35,7 +47,6 @@ def execute_ga(matrix, num_dev):
 
     toolbox = base.Toolbox()
 
-    # create an operator that randomly returns 0 or 1:
     def populator(num_files):
         to_return = []
         for x in range(0, num_files):
@@ -60,7 +71,10 @@ def execute_ga(matrix, num_dev):
         # let's find a way to compute the fitness function in relation to the big matrix
         summ = 0
         for x in individual:
-            summ += sum(x)
+            partial_sum = 0
+            for index in range(0, len(x) - 1):
+                partial_sum += x[index] / dev_worked[index]
+            summ += partial_sum
         return summ,  # return a tuple
 
 
