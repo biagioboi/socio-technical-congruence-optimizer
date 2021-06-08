@@ -49,10 +49,11 @@ def createMatrix():
 
     cont = 0
     for x in trasp:
-        x = x + finalToAdd[cont]
-        cont = cont + 1
+        row = []
 
-    finalMatrix.append(trasp)
+        row.append(x + finalToAdd[cont])
+        cont = cont + 1
+        finalMatrix.extend(row)
 
     print(finalMatrix)
 

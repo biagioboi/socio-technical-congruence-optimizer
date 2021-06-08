@@ -89,7 +89,7 @@ def main():
 
         # apply the selection operator, to select the next generation's individuals:
         offspring = toolbox.select(population, len(population))
-        # clone the selected individuals:
+        # javapoet the selected individuals:
         offspring = list(map(toolbox.clone, offspring))
 
         # apply the crossover operator to pairs of offspring:
