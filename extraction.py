@@ -8,10 +8,7 @@ import numpy
 
 repo = "square/javapoet"
 toExtract = ExtractSourceFilesInfo(repo, "src/main")
-print(toExtract.getFileFileDictionary())
-print(toExtract.getFileDevMatrix())
 toExtractDev = ExtractDevelopersCommunicationInfo(repo)
-print(toExtractDev.get_communications_between_contributors())
 
 def createMatrix():
     fileFileMatrix, name_of_classes = toExtract.getFileFileMatrix()
