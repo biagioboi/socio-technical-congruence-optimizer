@@ -69,13 +69,19 @@ def execute_ga(matrix, num_dev):
 
     def oneMaxFitness(individual):
         # let's find a way to compute the fitness function in relation to the big matrix
+
+        # first of all we need to communicate to the algorithm that should not create
+        # dependencies between a file and itself
+
         summ = 0
+        cont = 0
         for x in individual:
+            cont += 1
             partial_sum = 0
             for index in range(0, len(x) - 1):
                 partial_sum += x[index] / dev_worked[index]
             summ += partial_sum
-        return summ,  # return a tuple
+        return summ,  # return a tuple (30,70,,)
 
 
     toolbox.register("evaluate", oneMaxFitness)
@@ -132,8 +138,10 @@ def execute_ga(matrix, num_dev):
 
             for mutant in offspring:
                 if random.random() < P_MUTATION:
-                    toolbox.mutate(mutant[random.randint(0, len(mutant) - 1)])
-                    del mutant.fitness.values
+                    # foreach list inside the list of list (matrix), do the mutation process
+                    for x in range(0, len(mutant) - 1):
+                        toolbox.mutate(mutant[x])
+                        del mutant.fitness.values
 
             # calculate fitness for the individuals with no previous calculated fitness value:
             freshIndividuals = [ind for ind in offspring if not ind.fitness.valid]
