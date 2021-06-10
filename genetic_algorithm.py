@@ -10,6 +10,7 @@ import seaborn as sns
 
 def execute_ga(matrix, num_dev):
     # split the matrix in order to obtain the only file / file matrix
+
     num_file = len(matrix) - num_dev
     matrix_file_file = []
     cont = 1
@@ -18,7 +19,7 @@ def execute_ga(matrix, num_dev):
         if cont == num_file:
             break
         cont += 1
-
+    print(matrix_file_file)
     # for each file, check the number of commit by devs, in order to determine the importance of that file
     dev_worked = []
     for x in matrix[num_file:len(matrix)-1]:
@@ -45,6 +46,8 @@ def execute_ga(matrix, num_dev):
     RANDOM_SEED = 42
     random.seed(RANDOM_SEED)
 
+    number_of_changes = []
+
     toolbox = base.Toolbox()
 
     def populator(num_files):
@@ -55,7 +58,7 @@ def execute_ga(matrix, num_dev):
     toolbox.register("zeroOrOne", populator, num_file)
 
     # define a single objective, maximizing fitness strategy:
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0,))
 
     # create the Individual class based on list:
     creator.create("Individual", list, fitness=creator.FitnessMin)
@@ -70,18 +73,21 @@ def execute_ga(matrix, num_dev):
     def oneMaxFitness(individual):
         # let's find a way to compute the fitness function in relation to the big matrix
 
-        # first of all we need to communicate to the algorithm that should not create
-        # dependencies between a file and itself
-
         summ = 0
         cont = 0
+        differences = 0
         for x in individual:
-            cont += 1
             partial_sum = 0
             for index in range(0, len(x) - 1):
-                partial_sum += x[index] / dev_worked[index]
+                if cont == index:  # put all the items on the diagonal equal to 0
+                    partial_sum = x[index] * 10
+                else:
+                    partial_sum += x[index] / dev_worked[index]
+                if x[index] != matrix[cont][index]:
+                    differences += abs(x[index] - matrix[cont][index])
             summ += partial_sum
-        return summ,  # return a tuple (30,70,,)
+            cont += 1
+        return summ, differences,  # return a tuple (30,70,,)
 
 
     toolbox.register("evaluate", oneMaxFitness)
@@ -94,9 +100,16 @@ def execute_ga(matrix, num_dev):
     # Single-point crossover:
     toolbox.register("mate", tools.cxOnePoint)
 
+    def mutateOperation(individual):
+        for x in individual:
+            for index in range(1, len(x) - 2):
+                if x[index] == 0:
+                    x[index], x[index - 1] = x[index - 1], x[index]
+        return individual
+
     # Flip-bit mutation:
     # indpb: Independent probability for each attribute to be flipped
-    toolbox.register("mutate", tools.mutFlipBit, indpb=1.0 / ONE_MAX_LENGTH)
+    toolbox.register("mutate", mutateOperation)
 
 
     # Genetic Algorithm flow:
@@ -138,10 +151,8 @@ def execute_ga(matrix, num_dev):
 
             for mutant in offspring:
                 if random.random() < P_MUTATION:
-                    # foreach list inside the list of list (matrix), do the mutation process
-                    for x in range(0, len(mutant) - 1):
-                        toolbox.mutate(mutant[x])
-                        del mutant.fitness.values
+                    toolbox.mutate(mutant)
+                    del mutant.fitness.values
 
             # calculate fitness for the individuals with no previous calculated fitness value:
             freshIndividuals = [ind for ind in offspring if not ind.fitness.valid]
