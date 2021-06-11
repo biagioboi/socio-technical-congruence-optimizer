@@ -39,8 +39,8 @@ def execute_ga(matrix, num_dev):
     # Genetic Algorithm constants:
     POPULATION_SIZE = 200
     P_CROSSOVER = 0.9  # probability for crossover
-    P_MUTATION = 0.1  # probability for mutating an individual
-    MAX_GENERATIONS = 500
+    P_MUTATION = 0.4  # probability for mutating an individual
+    MAX_GENERATIONS = 1000
 
     # set the random seed:
     RANDOM_SEED = 42
@@ -55,7 +55,10 @@ def execute_ga(matrix, num_dev):
         for x in range(0, num_files):
             to_return_partial = []
             for y in range(0, num_files):
-                to_return_partial.append(random.randint(0, 10))
+                if(x == y):
+                    to_return_partial.append(0)
+                else:
+                    to_return_partial.append(random.randint(0, 68))
             to_return.append(to_return_partial)
         return to_return
 
@@ -106,10 +109,25 @@ def execute_ga(matrix, num_dev):
     # Single-point crossover:
     toolbox.register("mate", tools.cxOnePoint)
 
+    def mutPersonal (individual, ranger, probability):
+        # print(individual)
+        for index, x in zip(range(0, len(individual)), individual):
+            if (random.randint(0,1)<probability):
+                if(random.randint(0,1)<0.5):
+                    individual[index] = min(0, abs(x-ranger))
+                else:
+                    individual[index] = min(x+ranger, 68)
+        # print(individual)
+        return
+
+
+
     def mutateOperation(individual):
+        prob = individual[1]/10000
         individual[1] = 0
         for index, x in zip(range(0, len(individual[0])), individual[0]):
-            tools.mutUniformInt(x, 0, 68, 0.1)
+            #controllo: non flippare se sei sulla diagonale (?)
+            mutPersonal(x, 2, prob)
             for index_2, element in zip(range(0, len(x) - 1), x):
                 if element != matrix_file_file[index][index_2]:
                     individual[1] += abs(matrix_file_file[index][index_2] - element)
@@ -151,7 +169,7 @@ def execute_ga(matrix, num_dev):
         # main evolutionary loop:
         # stop if min fitness value reached the zero, that is the best result
         # OR if number of generations exceeded the preset value:
-        while min(fitnessValues) > 0 and generationCounter < MAX_GENERATIONS:
+        while generationCounter < MAX_GENERATIONS:
             # update counter:
             generationCounter = generationCounter + 1
 
