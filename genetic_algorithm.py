@@ -37,10 +37,10 @@ def execute_ga(matrix, num_dev):
     ONE_MAX_LENGTH = num_file  # length of bit string to be optimized
 
     # Genetic Algorithm constants:
-    POPULATION_SIZE = 100
+    POPULATION_SIZE = 200
     P_CROSSOVER = 0.9  # probability for crossover
     P_MUTATION = 0.1  # probability for mutating an individual
-    MAX_GENERATIONS = 50
+    MAX_GENERATIONS = 500
 
     # set the random seed:
     RANDOM_SEED = 42
@@ -53,9 +53,16 @@ def execute_ga(matrix, num_dev):
     def populator(num_files):
         to_return = []
         for x in range(0, num_files):
-            to_return.append(random.randint(0, 10))
+            to_return_partial = []
+            for y in range(0, num_files):
+                to_return_partial.append(random.randint(0, 10))
+            to_return.append(to_return_partial)
         return to_return
-    toolbox.register("zeroOrOne", populator, num_file)
+
+    def populator_zero():
+        return 0
+
+    toolbox.register("PopFileMatrix", populator, num_file)
 
     # define a single objective, maximizing fitness strategy:
     creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0,))
@@ -64,30 +71,29 @@ def execute_ga(matrix, num_dev):
     creator.create("Individual", list, fitness=creator.FitnessMin)
     # creator.create("Individual", array.array, typecode='b', fitness=creator.FitnessMax)
 
+    toolbox.register("PopZero", populator_zero)
+
     # create the individual operator to fill up an Individual instance:
-    toolbox.register("individualCreator", tools.initRepeat, creator.Individual, toolbox.zeroOrOne, ONE_MAX_LENGTH)
+    toolbox.register("individualCreator", tools.initCycle, creator.Individual, (toolbox.PopFileMatrix,toolbox.PopZero), 1)
 
     # create the population operator to generate a list of individuals:
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
 
     def oneMaxFitness(individual):
         # let's find a way to compute the fitness function in relation to the big matrix
-
+        # here we have a list composed by first position, the list considered, and second position, the number of changes
         summ = 0
         cont = 0
-        differences = 0
-        for x in individual:
+        for x in individual[0]:
             partial_sum = 0
             for index in range(0, len(x) - 1):
                 if cont == index:  # put all the items on the diagonal equal to 0
                     partial_sum = x[index] * 10
                 else:
                     partial_sum += x[index] / dev_worked[index]
-                if x[index] != matrix[cont][index]:
-                    differences += abs(x[index] - matrix[cont][index])
             summ += partial_sum
             cont += 1
-        return summ, differences,  # return a tuple (30,70,,)
+        return summ, individual[1],  # return a tuple (30,70,,)
 
 
     toolbox.register("evaluate", oneMaxFitness)
@@ -101,11 +107,21 @@ def execute_ga(matrix, num_dev):
     toolbox.register("mate", tools.cxOnePoint)
 
     def mutateOperation(individual):
-        for x in individual:
-            for index in range(1, len(x) - 2):
-                if x[index] == 0:
-                    x[index], x[index - 1] = x[index - 1], x[index]
+        individual[1] = 0
+        for index, x in zip(range(0, len(individual[0])), individual[0]):
+            tools.mutUniformInt(x, 0, 68, 0.1)
+            for index_2, element in zip(range(0, len(x) - 1), x):
+                if element != matrix_file_file[index][index_2]:
+                    individual[1] += abs(matrix_file_file[index][index_2] - element)
         return individual
+
+    def populateChanges(population):
+        for individual in population:
+            for index, x in zip(range(0, len(individual[0]) - 1), individual[0]):
+                for index_2, element in zip(range(0, len(x) - 1), x):
+                    if element != matrix_file_file[index][index_2]:
+                        individual[1] += abs(matrix_file_file[index][index_2] - element)
+        return
 
     # Flip-bit mutation:
     # indpb: Independent probability for each attribute to be flipped
@@ -116,6 +132,8 @@ def execute_ga(matrix, num_dev):
     def main():
         # create initial population (generation 0):
         population = toolbox.populationCreator(n=POPULATION_SIZE)
+
+        populateChanges(population)
         generationCounter = 0
 
         # calculate fitness tuple for each individual in the population:
