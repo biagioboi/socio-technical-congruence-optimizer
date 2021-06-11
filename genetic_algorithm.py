@@ -20,13 +20,22 @@ def execute_ga(matrix, num_dev):
             break
         cont += 1
     print(matrix_file_file)
+
+    sumElem = 0
+    count = 0
+    for x in matrix_file_file:
+        for element in x:
+            count += 1
+            sumElem += element
+    mean = int(sumElem / count)
+
     # for each file, check the number of commit by devs, in order to determine the importance of that file
     dev_worked = []
     for x in matrix[num_file:len(matrix)-1]:
         if not dev_worked:  # means that the list is empty, so initialize it
-            dev_worked = x[0:num_file-1]
+            dev_worked = x[0:num_file]
         else:  # otherwise update the current values
-            for index in range(0, len(x) - 1):
+            for index in range(0, len(x)):
                 dev_worked[index] += x[index]
                 if index == len(dev_worked) - 1:
                     break
@@ -40,7 +49,7 @@ def execute_ga(matrix, num_dev):
     POPULATION_SIZE = 200
     P_CROSSOVER = 0.9  # probability for crossover
     P_MUTATION = 0.4  # probability for mutating an individual
-    MAX_GENERATIONS = 1000
+    MAX_GENERATIONS = 500
 
     # set the random seed:
     RANDOM_SEED = 42
@@ -109,25 +118,25 @@ def execute_ga(matrix, num_dev):
     # Single-point crossover:
     toolbox.register("mate", tools.cxOnePoint)
 
-    def mutPersonal (individual, ranger, probability):
+    def mutPersonal (individual, ranger, probability, mean):
         # print(individual)
         for index, x in zip(range(0, len(individual)), individual):
             if (random.randint(0,1)<probability):
                 if(random.randint(0,1)<0.5):
                     individual[index] = min(0, abs(x-ranger))
                 else:
-                    individual[index] = min(x+ranger, 68)
+                    individual[index] = min(x+ranger, mean)
         # print(individual)
         return
 
 
 
-    def mutateOperation(individual):
+    def mutateOperation(individual, mean):
         prob = individual[1]/10000
         individual[1] = 0
         for index, x in zip(range(0, len(individual[0])), individual[0]):
             #controllo: non flippare se sei sulla diagonale (?)
-            mutPersonal(x, 2, prob)
+            mutPersonal(x, 2, prob, mean)
             for index_2, element in zip(range(0, len(x) - 1), x):
                 if element != matrix_file_file[index][index_2]:
                     individual[1] += abs(matrix_file_file[index][index_2] - element)
@@ -143,7 +152,7 @@ def execute_ga(matrix, num_dev):
 
     # Flip-bit mutation:
     # indpb: Independent probability for each attribute to be flipped
-    toolbox.register("mutate", mutateOperation)
+    toolbox.register("mutate", mutateOperation, mean=mean)
 
 
     # Genetic Algorithm flow:
@@ -201,7 +210,6 @@ def execute_ga(matrix, num_dev):
 
             # collect fitnessValues into a list, update statistics and print:
             fitnessValues = [ind.fitness.values[0] for ind in population]
-
             maxFitness = max(fitnessValues)
             meanFitness = sum(fitnessValues) / len(population)
             maxFitnessValues.append(maxFitness)
