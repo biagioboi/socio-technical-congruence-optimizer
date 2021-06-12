@@ -15,11 +15,45 @@ def execute_ga(matrix, num_dev):
     matrix_file_file = []
     cont = 1
     for x in matrix:
-        matrix_file_file.append(x[0:num_file - 1])
+        matrix_file_file.append(x[0:num_file]) #-1?
         if cont == num_file:
             break
         cont += 1
-    print(matrix_file_file)
+    # print(matrix_file_file)
+
+
+    matrix_dev_dev = []
+    cont2 = 1
+
+    for x in matrix:
+        if (cont2 <= num_file):
+            cont2 += 1
+            continue
+        matrix_dev_dev.append(x[num_file:len(x)])
+        if cont2 == num_file + num_dev:
+            break
+        cont2 += 1
+
+    commDevelopers = 0
+    for x in matrix_dev_dev:
+        for element in x:
+            commDevelopers += element
+
+    # print(matrix_dev_dev)
+    # print(commDevelopers)
+
+    matrix_dev_file = []
+    cont3 = 1
+
+    for x in matrix:
+        if (cont3 <= num_file):
+            cont3 += 1
+            continue
+        matrix_dev_file.append(x[0:num_file])
+        if cont3 == num_file + num_dev:
+            break
+        cont2 += 1
+
 
     sumElem = 0
     count = 0
@@ -39,7 +73,7 @@ def execute_ga(matrix, num_dev):
                 dev_worked[index] += x[index]
                 if index == len(dev_worked) - 1:
                     break
-    print(dev_worked)
+    # print(dev_worked)
 
     # problem constants:
     # length of the random list to create
@@ -74,10 +108,13 @@ def execute_ga(matrix, num_dev):
     def populator_zero():
         return 0
 
+    def populator_comm_developers():
+        return commDevelopers
+
     toolbox.register("PopFileMatrix", populator, num_file)
 
     # define a single objective, maximizing fitness strategy:
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0,))
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, 1.0))
 
     # create the Individual class based on list:
     creator.create("Individual", list, fitness=creator.FitnessMin)
@@ -85,11 +122,50 @@ def execute_ga(matrix, num_dev):
 
     toolbox.register("PopZero", populator_zero)
 
+    toolbox.register("PopCommDevelopers", populator_comm_developers)
+
+
     # create the individual operator to fill up an Individual instance:
-    toolbox.register("individualCreator", tools.initCycle, creator.Individual, (toolbox.PopFileMatrix,toolbox.PopZero), 1)
+    toolbox.register("individualCreator", tools.initCycle, creator.Individual, (toolbox.PopFileMatrix,toolbox.PopZero, toolbox.PopCommDevelopers), 1)
 
     # create the population operator to generate a list of individuals:
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
+
+    def checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file):
+        index_devi = []
+        index_devj = []
+
+        count_i = 0
+        count_j = 0
+
+        for x in matrix_dev_dev:
+            count_j = 0
+            for element in x:
+                if element != 0:
+                    index_devi.append(count_i)
+                    index_devj.append(count_j)
+                    element += 2 #valore simbolico (1st objective function)
+                count_j += 1
+            count_i += 1
+
+
+        for i, j in zip(index_devi, index_devj):
+            print(i, j)
+            row_i = matrix_dev_file[i]
+            row_j = matrix_dev_file[j]
+
+            for count in range (0, len(row_i)):
+                if (row_i[count] < row_j[count]):
+                    matrix_dev_file[i][count] += 2 #valore simbolico per la 2 objective function
+
+                elif (row_i[count] > row_j[count]):
+                    matrix_dev_file[j][count] += 2 #valore simbolico per la 2 objective function
+
+                else: #same values: increase both them
+                    matrix_dev_file[i][count] += 2  # valore simbolico per la 2 objective function
+                    matrix_dev_file[j][count] += 2  # valore simbolico per la 2 objective function
+
+        # print("DEV_FILE"+str(matrix_dev_file))
 
     def oneMaxFitness(individual):
         # let's find a way to compute the fitness function in relation to the big matrix
@@ -101,11 +177,13 @@ def execute_ga(matrix, num_dev):
             for index in range(0, len(x) - 1):
                 if cont == index:  # put all the items on the diagonal equal to 0
                     partial_sum = x[index] * 10
-                else:
+                else: #3rd objective function: minimize dependencies between files
                     partial_sum += x[index] / dev_worked[index]
             summ += partial_sum
             cont += 1
-        return summ, individual[1],  # return a tuple (30,70,,)
+
+        checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file)
+        return summ, individual[1], individual[2] # return a tuple (30,70,,)
 
 
     toolbox.register("evaluate", oneMaxFitness)
@@ -135,10 +213,10 @@ def execute_ga(matrix, num_dev):
         prob = individual[1]/10000
         individual[1] = 0
         for index, x in zip(range(0, len(individual[0])), individual[0]):
-            #controllo: non flippare se sei sulla diagonale (?)
             mutPersonal(x, 2, prob, mean)
             for index_2, element in zip(range(0, len(x) - 1), x):
                 if element != matrix_file_file[index][index_2]:
+                    #4th objective function: minimize number of operations
                     individual[1] += abs(matrix_file_file[index][index_2] - element)
         return individual
 
