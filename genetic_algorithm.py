@@ -59,8 +59,9 @@ def execute_ga(matrix, num_dev):
     count = 0
     for x in matrix_file_file:
         for element in x:
-            count += 1
-            sumElem += element
+            if element != 0:
+                count += 1
+                sumElem += element
     mean = int(sumElem / count)
 
     # for each file, check the number of commit by devs, in order to determine the importance of that file
@@ -131,40 +132,67 @@ def execute_ga(matrix, num_dev):
     # create the population operator to generate a list of individuals:
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
 
-    def checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file):
+    def checkDevDev_DevFile(actual_matrx, matrix_dev_dev, matrix_dev_file):
         index_devi = []
         index_devj = []
 
-        count_i = 0
-        count_j = 0
+        # dato x il numero di dipendenze del file 1 su 2
+        # dato z il numero di commit sul file 1
+        # dato k il numero di developer moltiplicato al grado di comunicazione tra essi
+        # punteggio da restituire k / x
+        punteggio = 0
+        for index1, file_list in zip(range(0, len(actual_matrx)), actual_matrx):
+            z = 0
+            punteggio_partial = 0
+            # andiamoci a salvare gli indici dei dev che hanno almeno un commit
+            dev_to_store = []
+            for index_dev, element in zip(range(0, len(matrix_dev_file)), matrix_dev_file):
+                if element[index1] > 0:
+                    if index_dev not in dev_to_store:
+                        dev_to_store.append(index_dev)
 
-        for x in matrix_dev_dev:
-            count_j = 0
-            for element in x:
-                if element != 0:
-                    index_devi.append(count_i)
-                    index_devj.append(count_j)
-                    element += 2 #valore simbolico (1st objective function)
-                count_j += 1
-            count_i += 1
+            # per ogni dev salvato andiamo a vedere il grado di comunicazione e lo sommiamo
+            for i in range(len(dev_to_store) - 1):
+                for k in range(i + 1, len(dev_to_store)):
+                    dev1 = dev_to_store[i]
+                    dev2 = dev_to_store[k]
+                    z += matrix_dev_dev[dev1][dev2] * (matrix_dev_file[dev1][index1] + matrix_dev_file[dev2][index1])
 
+            for value2 in file_list:
+                punteggio_partial += value2
 
-        for i, j in zip(index_devi, index_devj):
-            print(i, j)
-            row_i = matrix_dev_file[i]
-            row_j = matrix_dev_file[j]
-
-            for count in range (0, len(row_i)):
-                if (row_i[count] < row_j[count]):
-                    matrix_dev_file[i][count] += 2 #valore simbolico per la 2 objective function
-
-                elif (row_i[count] > row_j[count]):
-                    matrix_dev_file[j][count] += 2 #valore simbolico per la 2 objective function
-
-                else: #same values: increase both them
-                    matrix_dev_file[i][count] += 2  # valore simbolico per la 2 objective function
-                    matrix_dev_file[j][count] += 2  # valore simbolico per la 2 objective function
-
+            if punteggio_partial != 0:
+                punteggio = punteggio + z / punteggio_partial
+        punteggio = punteggio / len(actual_matrx)
+        # count_i = 0
+        # count_j = 0
+        #
+        # for x in matrix_dev_dev:
+        #     count_j = 0
+        #     for element in x:
+        #         if element != 0:
+        #             index_devi.append(count_i)
+        #             index_devj.append(count_j)
+        #             element += 2 #valore simbolico (1st objective function)
+        #         count_j += 1
+        #     count_i += 1
+        #
+        #
+        # for i, j in zip(index_devi, index_devj):
+        #     row_i = matrix_dev_file[i]
+        #     row_j = matrix_dev_file[j]
+        #
+        #     for count in range (0, len(row_i)):
+        #         if (row_i[count] < row_j[count]):
+        #             matrix_dev_file[i][count] += 2 #valore simbolico per la 2 objective function
+        #
+        #         elif (row_i[count] > row_j[count]):
+        #             matrix_dev_file[j][count] += 2 #valore simbolico per la 2 objective function
+        #
+        #         else: #same values: increase both them
+        #             matrix_dev_file[i][count] += 2  # valore simbolico per la 2 objective function
+        #             matrix_dev_file[j][count] += 2  # valore simbolico per la 2 objective function
+        return punteggio
         # print("DEV_FILE"+str(matrix_dev_file))
 
     def oneMaxFitness(individual):
@@ -174,15 +202,14 @@ def execute_ga(matrix, num_dev):
         cont = 0
         for x in individual[0]:
             partial_sum = 0
-            for index in range(0, len(x) - 1):
-                if cont == index:  # put all the items on the diagonal equal to 0
-                    partial_sum = x[index] * 10
-                else: #3rd objective function: minimize dependencies between files
-                    partial_sum += x[index] / dev_worked[index]
+            for index in range(0, len(x)):
+                # 3rd objective function: minimize dependencies between files
+                partial_sum += x[index] / dev_worked[index]
             summ += partial_sum
             cont += 1
 
-        checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file)
+        # checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file)
+        individual[2] = checkDevDev_DevFile(individual[0], matrix_dev_dev, matrix_dev_file)
         return summ, individual[1], individual[2] # return a tuple (30,70,,)
 
 
@@ -196,14 +223,16 @@ def execute_ga(matrix, num_dev):
     # Single-point crossover:
     toolbox.register("mate", tools.cxOnePoint)
 
-    def mutPersonal (individual, ranger, probability, mean):
+    def mutPersonal (individual, ranger, probability, mean, current_file):
         # print(individual)
         for index, x in zip(range(0, len(individual)), individual):
             if (random.randint(0,1)<probability):
+                if index == current_file:
+                    continue
                 if(random.randint(0,1)<0.5):
-                    individual[index] = min(0, abs(x-ranger))
+                    individual[index] = 0
                 else:
-                    individual[index] = min(x+ranger, mean)
+                    individual[index] = min(x+random.randint(0, ranger), mean)
         # print(individual)
         return
 
@@ -213,7 +242,7 @@ def execute_ga(matrix, num_dev):
         prob = individual[1]/10000
         individual[1] = 0
         for index, x in zip(range(0, len(individual[0])), individual[0]):
-            mutPersonal(x, 2, prob, mean)
+            mutPersonal(x, 10, prob, mean, index)
             for index_2, element in zip(range(0, len(x) - 1), x):
                 if element != matrix_file_file[index][index_2]:
                     #4th objective function: minimize number of operations
