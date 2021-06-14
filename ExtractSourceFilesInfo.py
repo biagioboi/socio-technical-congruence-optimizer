@@ -3,6 +3,10 @@ import subprocess
 import json
 from copy import deepcopy
 from pydriller import RepositoryMining
+import matplotlib.pyplot as plt
+import networkx as nx
+
+from networkx.algorithms import bipartite
 
 
 class ExtractSourceFilesInfo:
@@ -44,6 +48,32 @@ class ExtractSourceFilesInfo:
                 # corresponding value!
                 else:
                     commitDict[m.filename][commit.author.name] += 1
+
+        y = nx.Graph()
+
+        file_name_list = []
+        committer_list = []
+        for x, committers in commitDict.items():
+            file_name_list.append(x)
+            for committer, num_commit in committers.items():
+                if committer not in committer_list:
+                    committer_list.append(committer)
+        y.add_nodes_from(file_name_list, bipartite=0)
+        y.add_nodes_from(committer_list, bipartite=1)
+
+        list_to_add = []
+        for filename, committers in commitDict.items():
+            for committer, num_commit in committers.items():
+                list_to_add.append((filename, committer))
+        y.add_edges_from(list_to_add)
+        pos = nx.spring_layout(y, k=0.4, iterations=20)
+        nx.draw_networkx_nodes(y, pos, node_size=40)
+        nx.draw_networkx_edges(y, pos, edgelist=y.edges, edge_color="b", style="solid")
+        nx.draw_networkx_labels(y, pos, font_size=7, font_family="sans-serif")
+
+        plt.axis("off")
+        plt.figure(figsize=(10, 8),dpi=300)
+        plt.show()
 
         return commitDict
 
@@ -116,9 +146,24 @@ class ExtractSourceFilesInfo:
             j = 0
             dict_to_return[class_name] = dict()
             for class_name_2 in name_of_classes:
-                dict_to_return[class_name][class_name_2] = dependencies[k][j]
+                if dependencies[k][j] > 0:
+                    dict_to_return[class_name][class_name_2] = dependencies[k][j]
                 j = j + 1
             k = k + 1
+
+        y = nx.Graph()
+        for file, file_dep in dict_to_return.items():
+            for file2, val in file_dep.items():
+                y.add_edge(file, file2, weight=val)
+
+        pos = nx.spring_layout(y)
+        nx.draw_networkx_nodes(y, pos, node_size=70)
+        nx.draw_networkx_edges(y, pos, edgelist=y.edges, edge_color="b", style="solid")
+        nx.draw_networkx_labels(y, pos, font_size=5, font_family="sans-serif")
+
+        plt.axis("off")
+        plt.show()
+
 
         return dependencies, name_of_classes
 

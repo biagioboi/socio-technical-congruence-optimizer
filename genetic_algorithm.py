@@ -224,7 +224,6 @@ def execute_ga(matrix, num_dev):
     toolbox.register("mate", tools.cxOnePoint)
 
     def mutPersonal (individual, ranger, probability, mean, current_file):
-        # print(individual)
         for index, x in zip(range(0, len(individual)), individual):
             if (random.randint(0,1)<probability):
                 if index == current_file:
@@ -233,7 +232,7 @@ def execute_ga(matrix, num_dev):
                     individual[index] = 0
                 else:
                     individual[index] = min(x+random.randint(0, ranger), mean)
-        # print(individual)
+
         return
 
 
