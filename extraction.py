@@ -5,31 +5,26 @@ from genetic_algorithm import execute_ga
 
 
 # You need to store the repository and then you can start the script
-
-
 repo = "square/javapoet"
 toExtract = ExtractSourceFilesInfo(repo, "src/main")
 toExtractDev = ExtractDevelopersCommunicationInfo(repo)
 
 def createMatrix():
+
+    # Call the method to retrieve the matrices
     fileFileMatrix, name_of_classes = toExtract.getFileFileMatrix()
     fileDevMatrix, devNames = toExtract.getFileDevMatrix()
-
     devDevDictionary = toExtractDev.get_communications_between_contributors()
-
     finalMatrix = []
-    finalMatrixRow = []
 
-
-    for i in range (0, len(fileFileMatrix)):
-        finalMatrixRow = []
+    # Construct the final matrix, where all the three matrices are merged into one
+    for i in range(0, len(fileFileMatrix)):
         finalMatrixRow = fileFileMatrix[i]+fileDevMatrix[i]
-
         finalMatrix.append(finalMatrixRow)
 
-    finalToAdd = []
+    finalToAdd = list()
     for dev in devNames:
-        toAdd = []
+        toAdd = list()
         for dev2 in devNames:
             if dev not in devDevDictionary:
                 toAdd.append(0)
@@ -45,13 +40,12 @@ def createMatrix():
 
     cont = 0
     for x in trasp:
-        row = []
-
+        row = list()
         row.append(x + finalToAdd[cont])
         cont = cont + 1
         finalMatrix.extend(row)
 
-    print(finalMatrix)
+    # Execute the GA
     execute_ga(finalMatrix, len(devNames))
 
 createMatrix()

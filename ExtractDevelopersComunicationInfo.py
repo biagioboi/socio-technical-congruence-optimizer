@@ -22,7 +22,7 @@ class ExtractDevelopersCommunicationInfo:
         to_return = dict()
 
         if devs.status_code != 200:
-            raise ApiError('GET /issues/ {}'.format(devs.status_code))
+            raise ApiError(devs.status_code)
         else:
             for x in devs.json():
                 dev_detail = session.get(
@@ -30,14 +30,12 @@ class ExtractDevelopersCommunicationInfo:
                     headers={'content-type': 'application/vnd.github.v3+json'})
 
                 if dev_detail.status_code != 200:
-                    raise ApiError('GET /issues/ {}'.format(dev_detail.status_code))
+                    raise ApiError(dev_detail.status_code)
                 else:
                     y = dev_detail.json()
                     to_return[y['login']] = y['name']
 
         self._developers_list = to_return
-
-
 
     def get_communications_between_contributors(self):
         contributors_for_issue = self.get_contributors_for_issue(self.get_issues())
@@ -88,13 +86,12 @@ class ExtractDevelopersCommunicationInfo:
         # It's possible to catch only one page for time, and for each page at most 100 issues
         # so we should consider at least 10 pages to have a good dataset
         issues = session.get(
-                    'https://api.github.com/repos/' + self._repository_name + '/issues',
-                     headers={'content-type': 'application/vnd.github.v3+json'},
-                     params={'page': 1, 'per_page': 30})
+            'https://api.github.com/repos/' + self._repository_name + '/issues',
+            headers={'content-type': 'application/vnd.github.v3+json'},
+            params={'page': 1, 'per_page': 30})
         to_return = dict()
         if issues.status_code != 200:
-            print(issues.json())
-            raise ApiError('GET /issues/ {}'.format(issues.status_code))
+            raise ApiError(issues.status_code)
         else:
             for x in issues.json():
                 to_return[x['number']] = x['comments_url']
@@ -107,9 +104,9 @@ class ExtractDevelopersCommunicationInfo:
         for k, v in comments_urls.items():
             to_return[k] = dict()
             comments = session.get(v,
-                                    headers={'content-type': 'application/vnd.github.v3+json'})
+                                   headers={'content-type': 'application/vnd.github.v3+json'})
             if comments.status_code != 200:
-                raise ApiError('GET /issues/ {}'.format(comments.status_code))
+                raise ApiError(comments.status_code)
             else:
                 for item in comments.json():
                     if item['author_association'] != "NONE":
@@ -124,3 +121,13 @@ class ExtractDevelopersCommunicationInfo:
                 real_to_retrun[k][self._developers_list[keydev]] = number
 
         return real_to_retrun
+
+
+class ApiError(Exception):
+    """An API Error Exception"""
+
+    def __init__(self, status):
+        self.status = status
+
+    def __str__(self):
+        return "APIError: status={}".format(self.status)

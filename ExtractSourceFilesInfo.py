@@ -6,8 +6,6 @@ from pydriller import RepositoryMining
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from networkx.algorithms import bipartite
-
 
 class ExtractSourceFilesInfo:
 
@@ -28,7 +26,6 @@ class ExtractSourceFilesInfo:
         for commit in self._repository.traverse_commits():
             # N.B. Each commit may contain more than one modification: this is because a developer may modify more than
             # one file, and so may commit more modified file.
-
             # Iterating the modifications in the commit...
             for m in commit.modifications:
 
@@ -39,7 +36,8 @@ class ExtractSourceFilesInfo:
                     commitDict[m.filename] = dict()
 
                 # if the author modify the file 'filename' for the FIRST TIME, let's put the author name as a key of
-                # the internal dictionary (in turn, it is the value of the corresponding filename of the commitDict dictionary)
+                # the internal dictionary
+                # (in turn, it is the value of the corresponding filename of the commitDict dictionary)
                 # and '1' as value: this value will be the counter of times that the author modify that file.!
                 if commit.author.name not in commitDict[m.filename]:
                     commitDict[m.filename][commit.author.name] = 1
@@ -49,6 +47,7 @@ class ExtractSourceFilesInfo:
                 else:
                     commitDict[m.filename][commit.author.name] += 1
 
+        # Create the graph
         y = nx.Graph()
 
         file_name_list = []
@@ -58,6 +57,8 @@ class ExtractSourceFilesInfo:
             for committer, num_commit in committers.items():
                 if committer not in committer_list:
                     committer_list.append(committer)
+
+        # Add edges to the graph
         y.add_nodes_from(file_name_list, bipartite=0)
         y.add_nodes_from(committer_list, bipartite=1)
 
@@ -71,20 +72,19 @@ class ExtractSourceFilesInfo:
         nx.draw_networkx_edges(y, pos, edgelist=y.edges, edge_color="b", style="solid")
         nx.draw_networkx_labels(y, pos, font_size=7, font_family="sans-serif")
 
+        # Show the graph
         plt.axis("off")
-        plt.figure(figsize=(10, 8),dpi=300)
+        plt.figure(figsize=(10, 8), dpi=300)
         plt.show()
 
         return commitDict
 
     # This function creates the file-file developers dictionary
     def getFileFileDictionary(self):
-
         repo_dir = self._repository_path + "/" + self._path_to_file
         subprocess.call(
             ['java', '-jar', 'depends/depends.jar', 'java', repo_dir, 'outputDep', '--auto-include',
              '-d=depends'])
-
 
     def getFileFileMatrix(self):
         self.getFileFileDictionary()
@@ -94,25 +94,16 @@ class ExtractSourceFilesInfo:
         # Get class names of the entire project
         name_of_classes = list()
         for key in data['variables']:
-            # I've explicitly declared my path as being in Windows format, so I can use forward slashes in it.
             filename = pathlib.PureWindowsPath(key)
+
             # Convert path to the right format for the current operating system
             path = pathlib.PurePath(filename)
             name_of_classes.append(path.name)
 
         self._classNames = name_of_classes
 
-        # classNames = data["variables"]
-        # for i in range (0,43):
-        # splitting after each '/': split() returns a list of substrings of the original string (entire path):
-        # we are interested in the 9th element of the list
-        # print(i,classNames[i].split('/')[9])
-
-        # Dependencies matrix
-        dependencies = []
-        # A dependency list, used for each row of the matrix: at each iteration is used and then empty, in order
-        # to re-use it in the next iteration
-        dependenciesRow = []
+        dependencies = list()
+        dependenciesRow = list()
 
         # Iterating all the pairs of classes that have dependencies: index goes from 0 to n (#number of classes)
         for i in range(0, len(data["variables"])):
@@ -151,32 +142,33 @@ class ExtractSourceFilesInfo:
                 j = j + 1
             k = k + 1
 
+        # Create the graph
         y = nx.Graph()
         for file, file_dep in dict_to_return.items():
             for file2, val in file_dep.items():
                 y.add_edge(file, file2, weight=val)
 
+        # Add the edges to the graph
         pos = nx.spring_layout(y)
         nx.draw_networkx_nodes(y, pos, node_size=70)
         nx.draw_networkx_edges(y, pos, edgelist=y.edges, edge_color="b", style="solid")
         nx.draw_networkx_labels(y, pos, font_size=5, font_family="sans-serif")
 
+        # Print the graph
         plt.axis("off")
         plt.show()
 
-
         return dependencies, name_of_classes
 
-
     def getFileDevMatrix(self):
-        #Getting data
+        # Getting data
         data = self.getFileDevDictionary()
 
-        #Get all file names
+        # Get all file names
         fileNames = (list)(data.keys())
         devNames = []
 
-        #Get all developers names
+        # Get all developers names
         for file in self._classNames:
             for key in data[file].keys():
                 if key not in devNames:
@@ -184,22 +176,22 @@ class ExtractSourceFilesInfo:
                     devNames.append(key)
 
         # File dev matrix
-        fileDevMatrix = []
+        fileDevMatrix = list()
 
         # A list, used for each row of the matrix: at each iteration is used and then empty, in order
         # to re-use it in the next iteration
         fileDevRow = []
 
-        #Iterating file names
-        for i in range (0, len(self._classNames)):
-            #Iterating developers names
-            for j in range (0, len(devNames)):
-                #If a developer name is in the dictionary associated to a certain file... (this means that he made
-                #at least 1 commit on that file
+        # Iterating file names
+        for i in range(0, len(self._classNames)):
+            # Iterating developers names
+            for j in range(0, len(devNames)):
+                # If a developer name is in the dictionary associated to a certain file... (this means that he made
+                # at least 1 commit on that file
                 if (devNames[j] in data[self._classNames[i]]):
-                    #append the number of commits on that file
+                    # append the number of commits on that file
                     fileDevRow.append(data[self._classNames[i]][devNames[j]])
-                else: #otherwise put 0
+                else:  # otherwise put 0
                     fileDevRow.append(0)
 
             # We are going to the next row, this means that 'i' is going to change (another file is going to be
