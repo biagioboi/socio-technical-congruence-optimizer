@@ -82,7 +82,7 @@ def execute_ga(matrix, num_dev):
 
     # Genetic Algorithm constants:
     POPULATION_SIZE = 200
-    P_CROSSOVER = 0.9  # probability for crossover
+    P_CROSSOVER = 0.9  # probability for crossover //todo change crossover e mutazione probab.
     P_MUTATION = 0.4  # probability for mutating an individual
     MAX_GENERATIONS = 500
 
@@ -228,7 +228,7 @@ def execute_ga(matrix, num_dev):
             if (random.randint(0,1)<probability):
                 if index == current_file:
                     continue
-                if(random.randint(0,1)<0.5):
+                if(random.randint(0,1)<0.5): # todo provare con una probabilità diversa
                     individual[index] = 0
                 else:
                     individual[index] = min(x+random.randint(0, ranger), mean)
