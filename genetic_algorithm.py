@@ -10,7 +10,7 @@ import seaborn as sns
 
 def execute_ga(matrix, num_dev):
     # split the matrix in order to obtain the only file / file matrix
-
+    allChanges = []
     num_file = len(matrix) - num_dev
     matrix_file_file = []
     cont = 1
@@ -314,6 +314,7 @@ def execute_ga(matrix, num_dev):
             # replace the current population with the offspring:
             population[:] = offspring
 
+
             # collect fitnessValues into a list, update statistics and print:
             fitnessValues = [ind.fitness.values[0] for ind in population]
             maxFitness = max(fitnessValues)
@@ -325,7 +326,11 @@ def execute_ga(matrix, num_dev):
             # find and print best individual:
             best_index = fitnessValues.index(max(fitnessValues))
             print("Best Individual = ", *population[best_index], "\n")
+            allChanges.append(population[best_index][1])
 
+
+        print(allChanges)
+        print(meanFitnessValues)
         # Genetic Algorithm is done - plot statistics:
         sns.set_style("whitegrid")
         plt.plot(maxFitnessValues, color='red')
@@ -333,6 +338,30 @@ def execute_ga(matrix, num_dev):
         plt.xlabel('Generation')
         plt.ylabel('Max / Average Fitness')
         plt.title('Max and Average Fitness over Generations')
+        # plt.show()
+
+        fig1, ax1 = plt.subplots()
+        ax1.set_title('Fitness value box-plot')
+        ax1.boxplot(fitnessValues)
+        plt.show()
+
+        # plt.plot(allChanges, meanFitnessValues, marker = 'o', color = 'green')
+        #How the individual[1] values (changes) evolve during the population evolution, compared
+        #to the MEAN fitness value
+        fig, ax1 = plt.subplots(1, 1)
+        ax1.plot(allChanges, meanFitnessValues, marker='o')
+        ax1.set_title("Individual evolution [MEAN]")
+        ax1.invert_xaxis()
+        fig.tight_layout()
+        plt.show()
+
+        # How the individual[1] values (changes) evolve during the population evolution, compared
+        # to the MAX fitness value
+        fig, ax1 = plt.subplots(1, 1)
+        ax1.plot(allChanges, maxFitnessValues, marker='o')
+        ax1.set_title("Individual evolution [MAX]")
+        ax1.invert_xaxis()
+        fig.tight_layout()
         plt.show()
 
     main()
