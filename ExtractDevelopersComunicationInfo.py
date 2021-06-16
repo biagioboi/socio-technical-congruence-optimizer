@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("username", "password")
+session.auth = ("biagioboi", "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")
 
 
 class ExtractDevelopersCommunicationInfo:
@@ -13,6 +13,7 @@ class ExtractDevelopersCommunicationInfo:
         self._graph = nx.Graph()
         self._contributors = dict()
         self._developers_list = []
+
 
     def get_developers(self):
         devs = session.get(

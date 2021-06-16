@@ -60,7 +60,7 @@
 \acmDOI{}
 
 %% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[]{}{}{}
+\acmConference[Computer Science]{}{University of Salerno}{UNISA}
 \acmBooktitle{BDM Socio - Technical Optimizer}
 \acmPrice{}
 \acmISBN{}
@@ -172,13 +172,13 @@ Recent studies have proven that software development is a social activity, in fa
 \maketitle
 
 \section{Introduction}
-In detail the first step that we did was searching for tools and libraries to get the necessary information. In particular, to mine the information from communications between developers we used the {\itshape GitHub API }to get data on issues (comments and answers); while regarding information related to commit effettuati from developers on source files, through the framework {\itshape PyDriller} (\url{https://pydriller.readthedocs.io/en/latest/}), we have easily extracted information from any Git repository, such as commits, developers, modifications, diffs, and source codes, and quickly export as CSV file, the mining of information ended with the study of the relationship between files, in particular the structural code dependency analysis was carried out with {\itshape Depends} (\url{https://github.com/multilang-depends/depends.git}), a source code dependency extraction tool, designed to infer syntactical relations among source code entities, such as files and methods, from various programming languages.
+In detail the first step that we did was searching for tools and libraries to get the necessary information. In particular, to mine the information from communications between developers we used the {\itshape GitHub API }to get data on issues (comments and answers); while regarding information related to commit effettuati from developers on source files, through the framework {\itshape PyDriller}, we have easily extracted information from any Git repository, such as commits, developers, modifications, diffs, and source codes, and quickly export as CSV file, the mining of information ended with the study of the relationship between files, in particular the structural code dependency analysis was carried out with {\itshape Depends}, a source code dependency extraction tool, designed to infer syntactical relations among source code entities, such as files and methods, from various programming languages.
 
-The next step was the representation of this information by means of adjacent lists, that through the framework {\itshape NetworkX} (\url{https://networkx.org/}), we have been easily transformed into graphic elements (graphs). Once the three individual graphs have been obtained, they were subsequently merged to have all the communication, collaboration and coupling information represented by one single structure. 
+The next step was the representation of this information by means of adjacent lists, that through the framework {\itshape NetworkX}, we have been easily transformed into graphic elements (graphs). Once the three individual graphs have been obtained, they were subsequently merged to have all the communication, collaboration and coupling information represented by one single structure. 
 
-Finally the last step consists of the execution of a Genetic Algorithm (GA) through the framework {\itshape Deap} (\url{https://deap.readthedocs.io/en/master/}), able to find and optimize a version of the starting graph given as input, taking into account the objective functions to be optimised \cite{palomba1}.
+Finally the last step consists of the execution of a Genetic Algorithm (GA) through the framework {\itshape Deap}, able to find and optimize a version of the starting graph given as input, taking into account the objective functions to be optimised \cite{palomba1}.
 
-\section{Related Work}
+\section{Background}
 
 \subsection{Dev-Dev Implementation}
 To obtain data regarding the developer, methods have been implemented through the APIs made available by GitHub, that allow us to extrapolate various information from the repositories, including the list of developers who contributed to the development and the number of responses of those to the questions.
@@ -191,7 +191,7 @@ The extracted output allowed us to build a square matrix, on whose rows and colu
   \Description{}
 \end{figure}
 
-After the construction of the above matrix and through the use of the {\itshape NetworkX}, a Python tool for the creation, manipulation, and study of data structures, we obtained an undirected weighted graph in which the nodes represent the developers and the edges the communications among them. Meaning that if a developer participated in at least one issue thread with another developer, an edge is created to connect them. The weights are represented by the total number of replies given in a shared thread over all the threads of the project, without considering the criticality of the issue.
+After the construction of the above matrix and through the use of the {\itshape NetworkX}, a Python tool for the creation, manipulation, and study of data structures, we obtained an undirected weighted graph in which the nodes represent the developers and the edges the communications among them, as shown in Figure 2. Meaning that if a developer participated in at least one issue thread with another developer, an edge is created to connect them. The weights are represented by the total number of replies given in a shared thread over all the threads of the project, without considering the criticality of the issue.
 
 \begin{figure}[h]
   \centering
@@ -211,7 +211,7 @@ Another matrix was then built, on whose rows we find the developers and on whose
   \Description{}
 \end{figure}
 
-Also in this case, through {\itshape NetworkX} , a bipartite graph has been obtained, as we have only two types of nodes, developer and file, connected. A developer node is connected to a file node if the developer has committed at least once that file. The weight on the edges consists of the developer’s total number of commits on that file in the considered
+Also in this case, through {\itshape NetworkX} , a bipartite graph has been obtained as shown in Figure 4, as we have only two types of nodes, developer and file, connected. A developer node is connected to a file node if the developer has committed at least once that file. The weight on the edges consists of the developer’s total number of commits on that file in the considered
 
 \begin{figure}[h]
   \centering
@@ -250,7 +250,7 @@ The extracted data led to the construction of a third matrix, on whose rows and 
   \Description{}
 \end{figure}
 
-Using {\itshape NetworkX}, the file-file graph has been obtained, in which a file node is connected with another if it contains a reference to a code component contained in another file or vice versa. The obtained graph is then undirected, and the weights on the edges represent the actual number of references present among the two source files.
+Using {\itshape NetworkX}, the file-file graph has been obtained, as shown in Figure 6, in which a file node is connected with another if it contains a reference to a code component contained in another file or vice versa. The obtained graph is then undirected, and the weights on the edges represent the actual number of references present among the two source files.
 
 \begin{figure}[h]
   \centering
@@ -304,16 +304,17 @@ In this way, the mutation function will impact relatively on our graph.
 
 For the crossover function we haven’t done any kind of customization since we simply select childs on a probability of 90\%.
 
-\section{Conclusion}
-This work made it possible to confirm the existence of a relationship between the communication between developers and the dependencies between files. The genetic algorithm was necessary in order to identify a strategy to optimize these relationships through the defined objective functions.
-A possible future development of the project is the improvement of these functions in order to better identify what are the factors that affect socio-technical congruence.
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{img_7}
   \caption{Max and Average Fitness over Generation}
   \Description{}
 \end{figure}
+
+\section{Conclusion}
+This work made it possible to confirm the existence of a relationship between the communication between developers and the dependencies between files. The genetic algorithm was necessary in order to identify a strategy to optimize these relationships through the defined objective functions.
+A possible future development of the project is the improvement of these functions in order to better identify what are the factors that affect socio-technical congruence.
+
 
 %%
 %% The acknowledgments section is defined using the "acks" environment
@@ -329,7 +330,16 @@ A possible future development of the project is the improvement of these functio
 %%
 %% If your work has an appendix, this is the place to put it.
 \appendix
+\section{Online Resources}
 
+\begin{itemize}
+\item {\verb|Project Repository|}: \url{https://github.com/biagioboi/socio-technical-congruence-optimizer.git}
+\item {\verb|Github API|}: \url{https://docs.github.com/en}
+\item {\verb|PyDriller|}: \url{https://pydriller.readthedocs.io/en/latest/}
+\item {\verb|Depends|}: \url{https://github.com/multilang-depends/depends.git}
+\item {\verb|NetworkX|}: \url{https://networkx.org/}
+\item {\verb|Deap|}: \url{https://github.com/deap/deap}
+\end{itemize}
 
 \end{document}
 \endinput
