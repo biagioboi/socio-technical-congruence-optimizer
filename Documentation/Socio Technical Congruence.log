@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.6.13)  16 JUN 2021 09:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.6.13)  16 JUN 2021 19:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -952,11 +952,11 @@ File: img_4.png Graphic file (type png)
 <use img_4.png>
 Package pdftex.def Info: img_4.png  used on input line 189.
 (pdftex.def)             Requested size: 241.14749pt x 90.36787pt.
-<img_8.png, id=51, 1297.84875pt x 931.48pt>
-File: img_8.png Graphic file (type png)
-<use img_8.png>
-Package pdftex.def Info: img_8.png  used on input line 198.
-(pdftex.def)             Requested size: 241.14749pt x 173.06018pt.
+<img_8.1.png, id=51, 703.62875pt x 505.89pt>
+File: img_8.1.png Graphic file (type png)
+<use img_8.1.png>
+Package pdftex.def Info: img_8.1.png  used on input line 198.
+(pdftex.def)             Requested size: 241.14749pt x 173.37434pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1015,7 +1015,7 @@ LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 278.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 7.0pt on input line 278.
-[2.2 <./img_8.png> <./img_3.png> <./img_9.png> <./img_2.png>]
+[2.2 <./img_8.1.png> <./img_3.png> <./img_9.png> <./img_2.png>]
 <img_5.png, id=88, 688.5725pt x 189.70876pt>
 File: img_5.png Graphic file (type png)
 <use img_5.png>
@@ -1046,13 +1046,37 @@ LaTeX Warning: Command \textquoteleft invalid in math mode on input line 295.
 
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 295.
 
-<img_7.png, id=89, 815.045pt x 607.26875pt>
-File: img_7.png Graphic file (type png)
-<use img_7.png>
-Package pdftex.def Info: img_7.png  used on input line 309.
-(pdftex.def)             Requested size: 241.14749pt x 179.6709pt.
-(./Socio Technical Congruence.bbl [3.3 <./img_10.png> <./img_1.png> <./img_5.pn
-g> <./img_7.png>])
+<img_11.png, id=89, 567.11874pt x 421.575pt>
+File: img_11.png Graphic file (type png)
+<use img_11.png>
+Package pdftex.def Info: img_11.png  used on input line 317.
+(pdftex.def)             Requested size: 241.14749pt x 179.26027pt.
+<img_12.png, id=90, 570.13pt x 424.58624pt>
+File: img_12.png Graphic file (type png)
+<use img_12.png>
+Package pdftex.def Info: img_12.png  used on input line 324.
+(pdftex.def)             Requested size: 241.14749pt x 179.58186pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<img_13.png, id=91, 594.22pt x 440.64626pt>
+File: img_13.png Graphic file (type png)
+<use img_13.png>
+Package pdftex.def Info: img_13.png  used on input line 331.
+(pdftex.def)             Requested size: 241.14749pt x 178.82382pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<img_14.png, id=92, 465.74pt x 336.25626pt>
+File: img_14.png Graphic file (type png)
+<use img_14.png>
+Package pdftex.def Info: img_14.png  used on input line 338.
+(pdftex.def)             Requested size: 241.14749pt x 174.10515pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3.3 <./img_10.png> <./img_1.png> <./img_5.png> <./img_11.png>]
+(./Socio Technical Congruence.bbl)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
@@ -1069,23 +1093,22 @@ e.
 
 Class acmart Warning: CCS concepts are mandatory for papers over two pages.
 
-[4.4] (./Socio Technical Congruence.aux)
 
-Package rerunfilecheck Warning: File `"Socio Technical Congruence".out' has cha
-nged.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
 
-Package rerunfilecheck Info: Checksums for `"Socio Technical Congruence".out':
-(rerunfilecheck)             Before: E399EB4488B59258CC62AAFC8E7EF7A4;1452
-(rerunfilecheck)             After:  7FC6F314B4C98937F4B727D5C43ECD7C;1439.
+[4.4 <./img_12.png> <./img_13.png> <./img_14.png>]
+(./Socio Technical Congruence.aux)
+Package rerunfilecheck Info: File `"Socio Technical Congruence".out' has not ch
+anged.
+(rerunfilecheck)             Checksum: 04D4858B0529BBEC4237E5554241C41F;1439.
  ) 
 Here is how much of TeX's memory you used:
- 19520 strings out of 478994
- 299651 string characters out of 5858184
- 687700 words of memory out of 5000000
- 36162 multiletter control sequences out of 15000+600000
- 513024 words of font info for 251 fonts, out of 8000000 for 9000
+ 19553 strings out of 478994
+ 300174 string characters out of 5858184
+ 689742 words of memory out of 5000000
+ 36183 multiletter control sequences out of 15000+600000
+ 513733 words of font info for 256 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  96i,12n,131p,1168b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/
@@ -1106,10 +1129,10 @@ LinLibertineT.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/libert
 ine/LinLibertineTB.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/l
 ibertine/LinLibertineTI.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/pub
 lic/newtx/txsys.pfb>
-Output written on "Socio Technical Congruence.pdf" (4 pages, 8498201 bytes).
+Output written on "Socio Technical Congruence.pdf" (4 pages, 9066513 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 130 compressed objects within 2 object streams
- 29 named destinations out of 1000 (max. 500000)
- 56462 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 191 PDF objects out of 1000 (max. 8388607)
+ 134 compressed objects within 2 object streams
+ 32 named destinations out of 1000 (max. 500000)
+ 56477 words of extra memory for PDF output out of 61914 (max. 10000000)
 

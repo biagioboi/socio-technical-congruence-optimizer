@@ -195,7 +195,7 @@ After the construction of the above matrix and through the use of the {\itshape 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{img_8}
+  \includegraphics[width=\linewidth]{img_8.1}
   \caption{dev-dev graph}
   \Description{}
 \end{figure}
@@ -299,19 +299,55 @@ The third objective function has been implemented by the computation of the summ
 
 The fourth objective function has been implemented by the computation of the summation of the differences between the previous values of the {\itshape file-file} matrix and the new elements computed by the mutation operator. Our goal is to \textit{minimize} this summation, in order to prevent the {\itshape Genetic Algorithm} from excessively altering the original structure.
 
-Since we have a particular structure with some constraint we cannot use the standard mutation functions; so it’s been necessary to declare and use our customized function, that will take a mutant with a probability of 40\%, and for each element inside the mutant (for each row in the matrix) will change the value in a range from 0 to the mean of the value plus a value of 10 with a probability based on the number of changes already done.
+Since we have a particular structure with some constraint we cannot use the standard mutation functions; so it’s been necessary to declare and use our customized function, that will take a mutant with a probability of 20\%, and for each element inside the mutant (for each row in the matrix) will change the value in a range from 0 to the mean of the value plus a value of 10 with a probability based on the number of changes already done.
 In this way, the mutation function will impact relatively on our graph.
 
-For the crossover function we haven’t done any kind of customization since we simply select childs on a probability of 90\%.
+For the crossover function we haven’t done any kind of customization since we simply select childs on a probability of 50\%. The choice fell on the ‘CxOnePoint’ function that executes a one point crossover on the input sequence individuals. The two individuals are modified in place. The resulting individuals will respectively have the length of the other. With this strategy we guarantee a good randomness but without modifying the entire structure; preventing in this way, the increase of modifications.
+
+%
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=\linewidth]{img_7}
+%  \caption{Max/Average Fitness}
+%  \Description{}
+%\end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{img_7}
-  \caption{Max and Average Fitness over Generation}
+  \includegraphics[width=\linewidth]{img_11}
+  \caption{Individual change evolution}
+  \Description{}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{img_12}
+  \caption{Number of dependencies between files evolution}
+  \Description{}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{img_13}
+  \caption{Communication degree evolution}
+  \Description{}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{img_14}
+  \caption{New File-File Graph}
   \Description{}
 \end{figure}
 
 \section{Conclusion}
+Indeed, as for the following figures, it is possible to see how the summation of the dependencies and the number of changes of the best individual in the population decrease during the evolution, as shown in Figure (8,9)
+
+On the contrary, communication’s degree correctly increases during evolution, but contrary from the other graphics, in our opinion, it doesn’t evolve similarly due to the poor amount of data that we have, as shown in Figure 10.
+These are the expected and wanted results, since the goals have been achieved.
+
+Finally, let’s compare the real result of this evolution: the final population has output a new file-file matrix, and this is the resultant graph. Considering the {\itshape NetworkX} functionalities, the higher are the weights, the more clustered are the nodes and so the shorter are the edges. On the contrary, as the second graph tells, the nodes are more spaced since lower are the weights, as shown in Figure 11.
+
 This work made it possible to confirm the existence of a relationship between the communication between developers and the dependencies between files. The genetic algorithm was necessary in order to identify a strategy to optimize these relationships through the defined objective functions.
 A possible future development of the project is the improvement of these functions in order to better identify what are the factors that affect socio-technical congruence.
 
