@@ -60,7 +60,7 @@ def execute_ga(matrix, num_dev):
 
     # Genetic Algorithm constants:
     POPULATION_SIZE = 200
-    P_CROSSOVER = 0.5  # probability for crossover
+    P_CROSSOVER = 0.4  # probability for crossover
     P_MUTATION = 0.2  # probability for mutating an individual
     MAX_GENERATIONS = 500
 
@@ -212,7 +212,8 @@ def execute_ga(matrix, num_dev):
             individual.fitness.values = fitnessValue
 
         # extract fitness values from all individuals in population:
-        fitnessValues = [individual.fitness.values[0] + individual.fitness.values[1] - individual.fitness.values[2] for individual in population]
+        fitnessValues = [individual.fitness.values[0] + individual.fitness.values[1] - individual.fitness.values[2]
+                             for individual in population]
 
         # initialize statistics accumulators:
         counter_gen = list()
@@ -230,15 +231,21 @@ def execute_ga(matrix, num_dev):
             # update counter:
             generationCounter = generationCounter + 1
 
+
+
             # apply the selection operator, to select the next generation's individuals:
             offspring = toolbox.select(population, len(population))
             # javapoet the selected individuals:
             offspring = list(map(toolbox.clone, offspring))
 
+            # extract fitness values from all individuals in population:
+            fitnessValues = [individual.fitness.values[0] + individual.fitness.values[1] - individual.fitness.values[2]
+                             for individual in population]
+
             # apply the crossover operator to pairs of offspring:
             for child1, child2 in zip(offspring[::2], offspring[1::2]):
                 if random.random() < P_CROSSOVER:
-                    toolbox.mate(child1, child2)
+                    toolbox.mate(child1[0], child2[0])
                     del child1.fitness.values
                     del child2.fitness.values
 
