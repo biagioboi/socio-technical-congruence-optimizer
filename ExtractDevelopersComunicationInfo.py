@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 session = requests.Session()
-session.auth = ("biagioboi", "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")
+session.auth = ("username", "token")
 
 
 class ExtractDevelopersCommunicationInfo:
@@ -16,26 +16,30 @@ class ExtractDevelopersCommunicationInfo:
 
 
     def get_developers(self):
-        devs = session.get(
-            'https://api.github.com/repos/' + self._repository_name + '/contributors',
-            headers={'content-type': 'application/vnd.github.v3+json'})
-
+        cont = 1
         to_return = dict()
+        while True:
+            devs = session.get(
+                'https://api.github.com/repos/' + self._repository_name + '/contributors',
+                headers={'content-type': 'application/vnd.github.v3+json'},
+                params={'page': cont, 'per_page': 100})
 
-        if devs.status_code != 200:
-            raise ApiError(devs.status_code)
-        else:
-            for x in devs.json():
-                dev_detail = session.get(
-                    'https://api.github.com/users/' + x['login'],
-                    headers={'content-type': 'application/vnd.github.v3+json'})
+            if devs.status_code != 200:
+                raise ApiError(devs.status_code)
+            else:
+                if len(devs.json()) == 0:
+                    break
+                for x in devs.json():
+                    dev_detail = session.get(
+                        'https://api.github.com/users/' + x['login'],
+                        headers={'content-type': 'application/vnd.github.v3+json'})
 
-                if dev_detail.status_code != 200:
-                    raise ApiError(dev_detail.status_code)
-                else:
-                    y = dev_detail.json()
-                    to_return[y['login']] = y['name']
-
+                    if dev_detail.status_code != 200:
+                        raise ApiError(dev_detail.status_code)
+                    else:
+                        y = dev_detail.json()
+                        to_return[y['login']] = y['name']
+            cont += 1
         self._developers_list = to_return
 
     def get_communications_between_contributors(self):
@@ -86,23 +90,29 @@ class ExtractDevelopersCommunicationInfo:
     def get_issues(self):
         # It's possible to catch only one page for time, and for each page at most 100 issues
         # so we should consider at least 10 pages to have a good dataset
-        issues = session.get(
+        cont = 1
+        to_return = dict()
+        while True:
+            issues = session.get(
             'https://api.github.com/repos/' + self._repository_name + '/issues',
             headers={'content-type': 'application/vnd.github.v3+json'},
-            params={'page': 1, 'per_page': 30})
-        to_return = dict()
-        if issues.status_code != 200:
-            raise ApiError(issues.status_code)
-        else:
-            for x in issues.json():
-                to_return[x['number']] = x['comments_url']
-
+            params={'page': cont, 'per_page': 100, 'state': 'all'})
+            if issues.status_code != 200:
+                raise ApiError(issues.status_code)
+            else:
+                if len(issues.json()) == 0:
+                    break
+                for x in issues.json():
+                    to_return[x['number']] = x['comments_url']
+            cont += 1
         return to_return
 
     def get_contributors_for_issue(self, comments_urls):
         to_return = dict()
         self.get_developers()
+        cont = 0
         for k, v in comments_urls.items():
+            cont += 1
             to_return[k] = dict()
             comments = session.get(v,
                                    headers={'content-type': 'application/vnd.github.v3+json'})
@@ -110,7 +120,10 @@ class ExtractDevelopersCommunicationInfo:
                 raise ApiError(comments.status_code)
             else:
                 for item in comments.json():
-                    if item['author_association'] != "NONE":
+                    if item['author_association'] == "CONTRIBUTOR":
+                        # Check if the developer is included into the contributors list
+                        if item['user']['login'] not in self._developers_list:
+                            continue
                         if item['user']['login'] in to_return[k]:
                             to_return[k][item['user']['login']] = to_return[k][item['user']['login']] + 1
                         else:

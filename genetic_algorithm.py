@@ -1,11 +1,8 @@
 from deap import base
 from deap import creator
 from deap import tools
-
 import random
-
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def execute_ga(matrix, num_dev):
@@ -20,12 +17,10 @@ def execute_ga(matrix, num_dev):
         if cont == num_file:
             break
         cont += 1
-    # print(matrix_file_file)
 
-
+    # Re - Construct matrix dev / dev
     matrix_dev_dev = []
     cont2 = 1
-
     for x in matrix:
         if (cont2 <= num_file):
             cont2 += 1
@@ -35,17 +30,15 @@ def execute_ga(matrix, num_dev):
             break
         cont2 += 1
 
+    # Compute the sum of commits among all developers
     commDevelopers = 0
     for x in matrix_dev_dev:
         for element in x:
             commDevelopers += element
 
-    # print(matrix_dev_dev)
-    # print(commDevelopers)
-
+    # Re - Construct the matrix dev / file
     matrix_dev_file = []
     cont3 = 1
-
     for x in matrix:
         if (cont3 <= num_file):
             cont3 += 1
@@ -55,7 +48,7 @@ def execute_ga(matrix, num_dev):
             break
         cont2 += 1
 
-
+    # Retrieve the mean of dependencies, excluding the zero
     sumElem = 0
     count = 0
     for x in matrix_file_file:
@@ -65,94 +58,78 @@ def execute_ga(matrix, num_dev):
                 sumElem += element
     mean = int(sumElem / count)
 
-    # for each file, check the number of commit by devs, in order to determine the importance of that file
-    dev_worked = []
-    for x in matrix[num_file:len(matrix)-1]:
-        if not dev_worked:  # means that the list is empty, so initialize it
-            dev_worked = x[0:num_file]
-        else:  # otherwise update the current values
-            for index in range(0, len(x)):
-                dev_worked[index] += x[index]
-                if index == len(dev_worked) - 1:
-                    break
-    # print(dev_worked)
-
-    # problem constants:
-    # length of the random list to create
-    ONE_MAX_LENGTH = num_file  # length of bit string to be optimized
-
     # Genetic Algorithm constants:
     POPULATION_SIZE = 200
-    P_CROSSOVER = 0.9  # probability for crossover //todo change crossover e mutazione probab.
-    P_MUTATION = 0.4  # probability for mutating an individual
-    MAX_GENERATIONS = 100
+    P_CROSSOVER = 0.5  # probability for crossover
+    P_MUTATION = 0.2  # probability for mutating an individual
+    MAX_GENERATIONS = 500
 
     # set the random seed:
     RANDOM_SEED = 42
     random.seed(RANDOM_SEED)
 
-    number_of_changes = []
-
     toolbox = base.Toolbox()
 
+    # Return the initial random matrix
     def populator(num_files):
         to_return = []
         for x in range(0, num_files):
             to_return_partial = []
             for y in range(0, num_files):
-                if(x == y):
+                if x == y:
                     to_return_partial.append(0)
                 else:
                     to_return_partial.append(random.randint(0, 68))
             to_return.append(to_return_partial)
         return to_return
 
+    # Return zero
     def populator_zero():
         return 0
 
+    # Return the degree of communication, initially the same for all
     def populator_comm_developers():
         return commDevelopers
 
-    toolbox.register("PopFileMatrix", populator, num_file)
+    # Re-Compute the value of changes for the first iteration
+    def populateChanges(population):
+        for individual in population:
+            for index, x in zip(range(0, len(individual[0]) - 1), individual[0]):
+                for index_2, element in zip(range(0, len(x) - 1), x):
+                    if element != matrix_file_file[index][index_2]:
+                        individual[1] += abs(matrix_file_file[index][index_2] - element)
 
-    # define a single objective, maximizing fitness strategy:
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, 1.0))
+    # Declare the fitness function
+    creator.create("FitnessMulti", base.Fitness, weights=(-1.0, -1.0, 1.0))
 
     # create the Individual class based on list:
-    creator.create("Individual", list, fitness=creator.FitnessMin)
-    # creator.create("Individual", array.array, typecode='b', fitness=creator.FitnessMax)
+    creator.create("Individual", list, fitness=creator.FitnessMulti)
 
+    # Register the attributes (matrix, num_of_dependencies, communication_degree)
+    toolbox.register("PopFileMatrix", populator, num_file)
     toolbox.register("PopZero", populator_zero)
-
     toolbox.register("PopCommDevelopers", populator_comm_developers)
 
-
-    # create the individual operator to fill up an Individual instance:
     toolbox.register("individualCreator", tools.initCycle, creator.Individual, (toolbox.PopFileMatrix,toolbox.PopZero, toolbox.PopCommDevelopers), 1)
-
-    # create the population operator to generate a list of individuals:
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
 
     def checkDevDev_DevFile(actual_matrx, matrix_dev_dev, matrix_dev_file):
-        index_devi = []
-        index_devj = []
-
-        # dato x il numero di dipendenze del file 1 su 2
-        # dato z il numero di commit sul file 1
-        # dato k il numero di developer moltiplicato al grado di comunicazione tra essi
-        # punteggio da restituire k / x
-        punteggio = 0
+        # Be x the number of dependencies between file 1 and 2
+        # Be z the number of commit on file 1
+        # Be k the number of dev multiply by the degree of communication between them
+        # Return k / x
+        score = 0
         for index1, file_list in zip(range(0, len(actual_matrx)), actual_matrx):
             z = 0
             punteggio_partial = 0
-            # andiamoci a salvare gli indici dei dev che hanno almeno un commit
+            # Store the index of dev that have at least one commit
             dev_to_store = []
             for index_dev, element in zip(range(0, len(matrix_dev_file)), matrix_dev_file):
                 if element[index1] > 0:
                     if index_dev not in dev_to_store:
                         dev_to_store.append(index_dev)
 
-            # per ogni dev salvato andiamo a vedere il grado di comunicazione e lo sommiamo
+            # For each dev stored check the communication degree in order to sum it
             for i in range(len(dev_to_store) - 1):
                 for k in range(i + 1, len(dev_to_store)):
                     dev1 = dev_to_store[i]
@@ -163,60 +140,33 @@ def execute_ga(matrix, num_dev):
                 punteggio_partial += value2
 
             if punteggio_partial != 0:
-                punteggio = punteggio + z / punteggio_partial
-        punteggio = punteggio / len(actual_matrx)
-        # count_i = 0
-        # count_j = 0
-        #
-        # for x in matrix_dev_dev:
-        #     count_j = 0
-        #     for element in x:
-        #         if element != 0:
-        #             index_devi.append(count_i)
-        #             index_devj.append(count_j)
-        #             element += 2 #valore simbolico (1st objective function)
-        #         count_j += 1
-        #     count_i += 1
-        #
-        #
-        # for i, j in zip(index_devi, index_devj):
-        #     row_i = matrix_dev_file[i]
-        #     row_j = matrix_dev_file[j]
-        #
-        #     for count in range (0, len(row_i)):
-        #         if (row_i[count] < row_j[count]):
-        #             matrix_dev_file[i][count] += 2 #valore simbolico per la 2 objective function
-        #
-        #         elif (row_i[count] > row_j[count]):
-        #             matrix_dev_file[j][count] += 2 #valore simbolico per la 2 objective function
-        #
-        #         else: #same values: increase both them
-        #             matrix_dev_file[i][count] += 2  # valore simbolico per la 2 objective function
-        #             matrix_dev_file[j][count] += 2  # valore simbolico per la 2 objective function
-        return punteggio
-        # print("DEV_FILE"+str(matrix_dev_file))
+                score = score + z / punteggio_partial
+        score = score / len(actual_matrx)
+
+        return score
+
 
     def oneMaxFitness(individual):
-        # let's find a way to compute the fitness function in relation to the big matrix
-        # here we have a list composed by first position, the list considered, and second position, the number of changes
+        # Let's find a way to compute the fitness function in relation to the big matrix
+        # here we have a list composed by
+        # 1. the list considered
+        # 2. the number of changes
+        # 3. the degree of communication between devs considering that matrix
         summ = 0
         cont = 0
         for x in individual[0]:
             partial_sum = 0
             for index in range(0, len(x)):
                 # 3rd objective function: minimize dependencies between files
-                partial_sum += x[index] / dev_worked[index]
+                partial_sum += x[index]
             summ += partial_sum
             cont += 1
 
-        # checkDevDev_DevFile(matrix_dev_dev, matrix_dev_file)
         individual[2] = checkDevDev_DevFile(individual[0], matrix_dev_dev, matrix_dev_file)
-        return summ, individual[1], individual[2] # return a tuple (30,70,,)
+        return summ, individual[1], individual[2]
 
-
+    # Register the evaluate function
     toolbox.register("evaluate", oneMaxFitness)
-
-    # genetic operators:
 
     # Tournament selection with tournament size of 3:
     toolbox.register("select", tools.selTournament, tournsize=3)
@@ -224,20 +174,18 @@ def execute_ga(matrix, num_dev):
     # Single-point crossover:
     toolbox.register("mate", tools.cxOnePoint)
 
-    def mutPersonal (individual, ranger, probability, mean, current_file):
+    # Customized mutation function
+    def mutPersonal(individual, ranger, probability, mean, current_file):
         for index, x in zip(range(0, len(individual)), individual):
             if (random.randint(0,1)<probability):
                 if index == current_file:
                     continue
-                if(random.randint(0,1)<0.5): # todo provare con una probabilità diversa
+                if(random.randint(0,1)<0.2):
                     individual[index] = 0
                 else:
                     individual[index] = min(x+random.randint(0, ranger), mean)
 
-        return
-
-
-
+    # Customized mutate operation
     def mutateOperation(individual, mean):
         prob = individual[1]/10000
         individual[1] = 0
@@ -245,22 +193,10 @@ def execute_ga(matrix, num_dev):
             mutPersonal(x, 10, prob, mean, index)
             for index_2, element in zip(range(0, len(x) - 1), x):
                 if element != matrix_file_file[index][index_2]:
-                    #4th objective function: minimize number of operations
                     individual[1] += abs(matrix_file_file[index][index_2] - element)
         return individual
 
-    def populateChanges(population):
-        for individual in population:
-            for index, x in zip(range(0, len(individual[0]) - 1), individual[0]):
-                for index_2, element in zip(range(0, len(x) - 1), x):
-                    if element != matrix_file_file[index][index_2]:
-                        individual[1] += abs(matrix_file_file[index][index_2] - element)
-        return
-
-    # Flip-bit mutation:
-    # indpb: Independent probability for each attribute to be flipped
     toolbox.register("mutate", mutateOperation, mean=mean)
-
 
     # Genetic Algorithm flow:
     def main():
@@ -276,11 +212,16 @@ def execute_ga(matrix, num_dev):
             individual.fitness.values = fitnessValue
 
         # extract fitness values from all individuals in population:
-        fitnessValues = [individual.fitness.values[0] for individual in population]
+        fitnessValues = [individual.fitness.values[0] + individual.fitness.values[1] - individual.fitness.values[2] for individual in population]
 
         # initialize statistics accumulators:
-        maxFitnessValues = []
-        meanFitnessValues = []
+        counter_gen = list()
+        num_dependencies = list()
+        mean_num_dependencies = list()
+        mean_num_changes = list()
+        mean_deg_comm = list()
+
+        best_list = list()
 
         # main evolutionary loop:
         # stop if min fitness value reached the zero, that is the best result
@@ -317,71 +258,57 @@ def execute_ga(matrix, num_dev):
 
 
             # collect fitnessValues into a list, update statistics and print:
-            fitnessValues = [ind.fitness.values[0] for ind in population]
-            maxFitness = max(fitnessValues)
-            meanFitness = sum(fitnessValues) / len(population)
-            maxFitnessValues.append(maxFitness)
-            meanFitnessValues.append(meanFitness)
-            print("- Generation {}: Max Fitness = {}, Avg Fitness = {}".format(generationCounter, maxFitness, meanFitness))
+            fitnessValuesDependencies = [ind.fitness.values[0] for ind in population]
+            maxFitnessDependencies = max(fitnessValuesDependencies)
+            meanFitnessDependencies = sum(fitnessValuesDependencies) / len(population)
+
+            fitnessValueNumChanges = [ind.fitness.values[1] for ind in population]
+            maxFitnessNumChanges = max(fitnessValueNumChanges)
+            meanFitnessNumChanges = sum(fitnessValueNumChanges) / len(population)
+
+            fitnessValueComm = [ind.fitness.values[2] for ind in population]
+            maxFitnessComm = max(fitnessValueComm)
+            meanFitnessComm = sum(fitnessValueComm) / len(population)
+
+            print("- Generation {}: Max Fitness Dependencies = {}, Avg Fitness Dependencies = {}".format(generationCounter, maxFitnessDependencies, meanFitnessDependencies))
+            print("Max Fitness Num Changes = {}, Avg Fitness Num Changes = {}".format(maxFitnessNumChanges, meanFitnessNumChanges))
+            print("Max Fitness Deg. Communications = {}, Avg Fitness Deg. Communications = {}".format(maxFitnessComm, meanFitnessComm))
+
 
             # find and print best individual:
-            best_index = fitnessValues.index(max(fitnessValues))
+            best_index = fitnessValues.index(min(fitnessValues))
             print("Best Individual = ", *population[best_index], "\n")
+            num_dependencies.append(population[best_index].fitness.values[0])
+            mean_num_dependencies.append(meanFitnessDependencies)
             allChanges.append(population[best_index][1])
+            mean_num_changes.append(meanFitnessNumChanges)
             allScores.append(population[best_index][2])
+            mean_deg_comm.append(meanFitnessComm)
 
+            best_list = population[best_index][0]
+            counter_gen.append(generationCounter)
 
-        #print(allChanges)
-        #print(meanFitnessValues)
-        # Genetic Algorithm is done - plot statistics:
-        sns.set_style("whitegrid")
-        plt.plot(maxFitnessValues, color='red')
-        plt.plot(meanFitnessValues, color='green')
-        plt.xlabel('Generation')
-        plt.ylabel('Max / Average Fitness')
-        plt.title('Max and Average Fitness over Generations')
-        # plt.show()
-
-        fig1, ax1 = plt.subplots()
-        ax1.set_title('Fitness value box-plot')
-        ax1.boxplot(fitnessValues)
-        plt.show()
-
-        # plt.plot(allChanges, meanFitnessValues, marker = 'o', color = 'green')
-        #How the individual[1] values (changes) evolve during the population evolution, compared
-        #to the MEAN fitness value
         fig, ax1 = plt.subplots(1, 1)
-        ax1.plot(allChanges, meanFitnessValues, marker='o')
-        ax1.set_title("Individual change evolution [MEAN]")
-        #ax1.invert_xaxis()
+        ax1.plot(counter_gen, num_dependencies, color='red')
+        ax1.plot(counter_gen, mean_num_dependencies, color='green')
+        ax1.set_title("Number of dependencies between files evolution")
         fig.tight_layout()
         plt.show()
 
-        # How the individual[1] values (changes) evolve during the population evolution, compared
-        # to the MAX fitness value
         fig, ax1 = plt.subplots(1, 1)
-        ax1.plot(allChanges, maxFitnessValues, marker='o')
-        ax1.set_title("Individual change evolution [MAX]")
-        ax1.invert_xaxis()
+        ax1.plot(counter_gen, allChanges, color='red')
+        ax1.plot(counter_gen, mean_num_changes, color='green')
+        ax1.set_title("Individual changes evolution")
         fig.tight_layout()
         plt.show()
 
-        # How the individual[2] values (score) evolve during the population evolution, compared
-        # to the MEAN fitness value
         fig, ax1 = plt.subplots(1, 1)
-        ax1.plot(allScores, meanFitnessValues, marker='o')
-        ax1.set_title("Individual score evolution [MEAN]")
-        #ax1.invert_xaxis()
+        ax1.plot(counter_gen, allScores, color='red')
+        ax1.plot(counter_gen, mean_deg_comm, color='green')
+        ax1.set_title("Communication degree evolution")
         fig.tight_layout()
         plt.show()
 
-        # How the individual[2] values (score) evolve during the population evolution, compared
-        # to the MAX fitness value
-        fig, ax1 = plt.subplots(1, 1)
-        ax1.plot(allScores, maxFitnessValues, marker='o')
-        ax1.set_title("Individual score evolution [MAX]")
-        #ax1.invert_xaxis()
-        fig.tight_layout()
-        plt.show()
+        return best_list
 
-    main()
+    return main()
