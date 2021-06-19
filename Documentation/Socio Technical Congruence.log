@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.6.13)  16 JUN 2021 19:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.6.13)  19 JUN 2021 10:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -971,11 +971,11 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [1.1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
  <./img_4.png>]
-<img_9.png, id=68, 1306.8825pt x 913.4125pt>
+<img_9.png, id=68, 890.32625pt x 608.2725pt>
 File: img_9.png Graphic file (type png)
 <use img_9.png>
 Package pdftex.def Info: img_9.png  used on input line 218.
-(pdftex.def)             Requested size: 241.14749pt x 168.53267pt.
+(pdftex.def)             Requested size: 241.14749pt x 164.74625pt.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 228.
 LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 22
@@ -994,11 +994,11 @@ File: img_2.png Graphic file (type png)
 <use img_2.png>
 Package pdftex.def Info: img_2.png  used on input line 248.
 (pdftex.def)             Requested size: 241.14749pt x 90.05606pt.
-<img_10.png, id=70, 1307.88625pt x 922.44624pt>
+<img_10.png, id=70, 894.34125pt x 621.32124pt>
 File: img_10.png Graphic file (type png)
 <use img_10.png>
 Package pdftex.def Info: img_10.png  used on input line 257.
-(pdftex.def)             Requested size: 241.14749pt x 170.07278pt.
+(pdftex.def)             Requested size: 241.14749pt x 167.53143pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1046,24 +1046,24 @@ LaTeX Warning: Command \textquoteleft invalid in math mode on input line 295.
 
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 295.
 
-<img_11.png, id=89, 567.11874pt x 421.575pt>
+<img_11.png, id=89, 497.86pt x 368.37625pt>
 File: img_11.png Graphic file (type png)
 <use img_11.png>
 Package pdftex.def Info: img_11.png  used on input line 317.
-(pdftex.def)             Requested size: 241.14749pt x 179.26027pt.
-<img_12.png, id=90, 570.13pt x 424.58624pt>
+(pdftex.def)             Requested size: 241.14749pt x 178.4318pt.
+<img_12.png, id=90, 497.86pt x 369.38pt>
 File: img_12.png Graphic file (type png)
 <use img_12.png>
 Package pdftex.def Info: img_12.png  used on input line 324.
-(pdftex.def)             Requested size: 241.14749pt x 179.58186pt.
+(pdftex.def)             Requested size: 241.14749pt x 178.91798pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<img_13.png, id=91, 594.22pt x 440.64626pt>
+<img_13.png, id=91, 499.8675pt x 371.3875pt>
 File: img_13.png Graphic file (type png)
 <use img_13.png>
 Package pdftex.def Info: img_13.png  used on input line 331.
-(pdftex.def)             Requested size: 241.14749pt x 178.82382pt.
+(pdftex.def)             Requested size: 241.14749pt x 179.16501pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1106,7 +1106,7 @@ anged.
 Here is how much of TeX's memory you used:
  19553 strings out of 478994
  300174 string characters out of 5858184
- 689742 words of memory out of 5000000
+ 689740 words of memory out of 5000000
  36183 multiletter control sequences out of 15000+600000
  513733 words of font info for 256 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
@@ -1129,7 +1129,7 @@ LinLibertineT.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/libert
 ine/LinLibertineTB.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/l
 ibertine/LinLibertineTI.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/pub
 lic/newtx/txsys.pfb>
-Output written on "Socio Technical Congruence.pdf" (4 pages, 9066513 bytes).
+Output written on "Socio Technical Congruence.pdf" (4 pages, 4832689 bytes).
 PDF statistics:
  191 PDF objects out of 1000 (max. 8388607)
  134 compressed objects within 2 object streams

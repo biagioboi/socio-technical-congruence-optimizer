@@ -211,7 +211,7 @@ Another matrix was then built, on whose rows we find the developers and on whose
   \Description{}
 \end{figure}
 
-Also in this case, through {\itshape NetworkX} , a bipartite graph has been obtained as shown in Figure 4, as we have only two types of nodes, developer and file, connected. A developer node is connected to a file node if the developer has committed at least once that file. The weight on the edges consists of the developer’s total number of commits on that file in the considered
+Also in this case, through {\itshape NetworkX} , a bipartite graph has been obtained as shown in Figure 4, as we have only two types of nodes, developer and file, connected. A developer node is connected to a file node if the developer has committed at least once that file. The weight on the edges consists of the developer’s total number of commits on that file in the considered.
 
 \begin{figure}[h]
   \centering
@@ -295,7 +295,7 @@ In order to implement the first two objective functions, the basic idea is to co
 In other words, we want to compute the degree of communication for each file: so, given those 2 values, we calculate the ratio between $‘y’$ and $‘x’$.
 The goal is to \textit{maximize} this value, given the assumption that a high number of replies means good teamwork.
 
-The third objective function has been implemented by the computation of the summation of the total number of dependencies: the goal, clearly, is to \textit{minimize} it
+The third objective function has been implemented by the computation of the summation of the total number of dependencies: the goal, clearly, is to \textit{minimize} it.
 
 The fourth objective function has been implemented by the computation of the summation of the differences between the previous values of the {\itshape file-file} matrix and the new elements computed by the mutation operator. Our goal is to \textit{minimize} this summation, in order to prevent the {\itshape Genetic Algorithm} from excessively altering the original structure.
 
@@ -341,7 +341,7 @@ For the crossover function we haven’t done any kind of customization since we 
 \end{figure}
 
 \section{Conclusion}
-Indeed, as for the following figures, it is possible to see how the summation of the dependencies and the number of changes of the best individual in the population decrease during the evolution, as shown in Figure (8,9)
+Indeed, as for the following figures, it is possible to see how the summation of the dependencies and the number of changes of the best individual in the population decrease during the evolution, as shown in Figure (8,9).
 
 On the contrary, communication’s degree correctly increases during evolution, but contrary from the other graphics, in our opinion, it doesn’t evolve similarly due to the poor amount of data that we have, as shown in Figure 10.
 These are the expected and wanted results, since the goals have been achieved.
